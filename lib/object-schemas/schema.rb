@@ -21,6 +21,10 @@ module ObjectSchemas
 	# 3. If the schema validation has been set to "strict mode", check that the object doesn't have any properties that are not defined in the schema
 	# 4. Iterate through each defined property and check that the object's property value is `valid?`
 
+	class << self
+		# Make this class abstract.
+  	private :new
+	end
 
 	end
 end
