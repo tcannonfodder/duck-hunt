@@ -1,10 +1,10 @@
-require File.expand_path('../test_helper', __FILE__)
+require File.expand_path('../../test_helper', __FILE__)
 
 
 class ObjectSchemas::Properties::Test < ObjectSchemas::Properties::Property
 end
 
-class TestSchema < ObjectSchemas::Schema
+class TestSchema < ObjectSchemas::Schemas::Schema
 
 	attr_accessor :favorite_show
 
@@ -14,7 +14,7 @@ class TestSchema < ObjectSchemas::Schema
 	end
 end
 
-describe ObjectSchemas::SchemaDefinition, "defining an object through a block" do
+describe ObjectSchemas::Schemas::SchemaDefinition, "defining an object through a block" do
 	it "should accept a block through the `define` method and use it create a new instance of the class" do
 		schema = TestSchema.define do |s|
 			s.strict!
@@ -64,7 +64,7 @@ describe ObjectSchemas::SchemaDefinition, "defining an object through a block" d
 	end
 end
 
-describe ObjectSchemas::SchemaDefinition, "defining an object without a block" do
+describe ObjectSchemas::Schemas::SchemaDefinition, "defining an object without a block" do
 	it "should default the strict mode to false" do
 		schema = TestSchema.new
 		schema.strict_mode.must_equal false
@@ -79,7 +79,7 @@ describe ObjectSchemas::SchemaDefinition, "defining an object without a block" d
 	end
 end
 
-describe ObjectSchemas::SchemaDefinition, "defining properties" do
+describe ObjectSchemas::Schemas::SchemaDefinition, "defining properties" do
 	it "should be able to add a new property to the schema, which is required by default" do
 		schema = TestSchema.new
 		schema.test "name"
