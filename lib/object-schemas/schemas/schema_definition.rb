@@ -53,6 +53,8 @@ module ObjectSchemas
 		  	end
 		  end
 
+		  protected
+
 			def property_definition_exists?(property)
 				ObjectSchemas::Properties.const_defined?(property)
 			end
@@ -60,8 +62,6 @@ module ObjectSchemas
 			def get_property_constant(property)
 				ObjectSchemas::Properties.const_get(property)
 			end
-
-			protected
 
 			def add_property(property_constant, *args)
 		  	raise NotImplementedError
