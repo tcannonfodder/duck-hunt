@@ -1,11 +1,25 @@
 module ObjectSchemas
-	class Schema
-		include ObjectSchemas::SchemaDefinition
+  class Schema
+    include ObjectSchemas::SchemaDefinition
 
-	class << self
-		# Make this class abstract.
-  	private :new
-	end
+    def initialize(*var)
+      @properties = {}
+      #a key-value pair of all the required properties in the schema, references objects in `@properties`
+      @required_properties = {}
+      yield self if block_given?
+    end
 
-	end
+    def properties
+      return @properties.dup
+    end
+
+    protected
+
+    def add_property(property_constant, *args)
+      name = args[0].to_s
+      raise PropertyAlreadyDefined, "`#{name}` has already been defined in this schema" if @properties.has_key?(args[0])
+      @properties[name] = property_constant.new(*args)
+      @required_properties[name] = @properties[name] if @properties[name].required?
+    end
+  end
 end
