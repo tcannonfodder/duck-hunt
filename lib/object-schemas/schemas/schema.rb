@@ -7,7 +7,6 @@ module ObjectSchemas
         @properties = {}
         #a key-value pair of all the required properties in the schema, references objects in `@properties`
         @required_properties = {}
-        yield self if block_given?
       end
 
       def properties
