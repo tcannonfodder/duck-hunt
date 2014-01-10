@@ -1,19 +1,6 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 
-class ObjectSchemas::Properties::Test < ObjectSchemas::Properties::Property
-end
-
-class TestSchema < ObjectSchemas::Schemas::Schema
-
-	attr_accessor :favorite_show
-
-	def initialize
-		self.favorite_show = "Doctor Who"
-		super
-	end
-end
-
 describe ObjectSchemas::Schemas::SchemaDefinition, "defining an object through a block" do
 	it "should accept a block through the `define` method and use it create a new instance of the class" do
 		schema = TestSchema.define do |s|
