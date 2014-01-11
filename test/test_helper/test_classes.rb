@@ -1,6 +1,18 @@
 class ObjectSchemas::Properties::Test < ObjectSchemas::Properties::Property
 end
 
+class ObjectSchemas::Properties::AlwaysRightType < ObjectSchemas::Properties::Property
+  def matches_type?(value)
+    return true
+  end
+end
+
+class ObjectSchemas::Properties::AlwaysWrongType < ObjectSchemas::Properties::Property
+  def matches_type?(value)
+    return false
+  end
+end
+
 class ObjectSchemas::Validators::Test < ObjectSchemas::Validators::Validator
 end
 

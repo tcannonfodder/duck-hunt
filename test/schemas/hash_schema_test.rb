@@ -117,3 +117,92 @@ describe ObjectSchemas::Schemas::HashSchema, "defining properties" do
 		}.must_raise(NameError)
 	end
 end
+
+describe ObjectSchemas::Schemas::HashSchema, "validation (strict mode)" do
+	it "should return false if the object provided is not a hash" do
+		schema = ObjectSchemas::Schemas::HashSchema.define do |s|
+			s.test "name"
+		end
+
+		schema.validate?("hello").must_equal false
+		schema.errors.size.must_equal 1
+		schema.errors["base"].must_equal ["wrong type"]
+	end
+
+	it "should return false if one of the properties is not valid" do
+		schema = ObjectSchemas::Schemas::HashSchema.define do |s|
+			s.always_wrong_type "name"
+		end
+
+		schema.validate?({:name => "hello"}).must_equal false
+		schema.errors.size.must_equal 1
+		schema.errors["name"].must_equal ["wrong type"]
+	end
+
+	it "should return false if the object is missing a required property" do
+		schema = ObjectSchemas::Schemas::HashSchema.define do |s|
+			s.test "name", :required => true
+			s.always_right_type "hello", :required => false
+		end
+
+		schema.validate?({:hello => "hello"}).must_equal false
+		schema.errors.size.must_equal 1
+		schema.errors["name"].must_equal ["required"]
+	end
+
+	it "should return false if the schema has been set to strict mode and the hash provided has extra properties" do
+		schema = ObjectSchemas::Schemas::HashSchema.define do |s|
+			s.test "name", :required => true
+		end
+
+		schema.validate?({:name => "hello", :hello => "hello"}).must_equal false
+		schema.errors.size.must_equal 1
+		schema.errors["base"].must_equal ["has properties not defined in schema"]
+	end
+end
+
+describe ObjectSchemas::Schemas::HashSchema, "validation (relaxed mode)" do
+	it "should return false if the object provided is not a hash" do
+		schema = ObjectSchemas::Schemas::HashSchema.define do |s|
+			s.test "name"
+			s.relaxed!
+		end
+
+		schema.validate?("hello").must_equal false
+		schema.errors.size.must_equal 1
+		schema.errors["base"].must_equal ["wrong type"]
+	end
+
+	it "should return false if one of the properties is not valid" do
+		schema = ObjectSchemas::Schemas::HashSchema.define do |s|
+			s.always_wrong_type "name"
+			s.relaxed!
+		end
+
+		schema.validate?({:name => "hello"}).must_equal false
+		schema.errors.size.must_equal 1
+		schema.errors["name"].must_equal ["wrong type"]
+	end
+
+	it "should return false if the object is missing a required property" do
+		schema = ObjectSchemas::Schemas::HashSchema.define do |s|
+			s.test "name", :required => true
+			s.always_right_type "hello", :required => false
+			s.relaxed!
+		end
+
+		schema.validate?({:hello => "hello"}).must_equal false
+		schema.errors.size.must_equal 1
+		schema.errors["name"].must_equal ["required"]
+	end
+
+	it "should return true if the schema has been set to relaxed mode and the hash provided has extra properties" do
+		schema = ObjectSchemas::Schemas::HashSchema.define do |s|
+			s.always_right_type "name", :required => true
+			s.relaxed!
+		end
+
+		schema.validate?({:name => "hello", :hello => "hello"}).must_equal true
+		schema.errors.size.must_equal 0
+	end
+end
