@@ -40,7 +40,7 @@ describe ObjectSchemas::Properties::Property, "validation" do
 
     property.valid?("herp").must_equal false
     property.errors.size.must_equal 1
-    property.errors.first.must_equal "does not match type"
+    property.errors.first.must_equal "wrong type"
   end
 
   it "should use a validator defined during initialization when validating" do

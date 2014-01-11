@@ -112,7 +112,7 @@ module ObjectSchemas
       #implemented by the class to do a top-level check that the object is even of the right type
       def matches_type?(object_being_validated)
         unless object_being_validated.is_a? Hash
-          add_base_error_message("wrong type")
+          add_base_error_message(ObjectSchemas::TYPE_MISMATCH_MESSAGE)
           return false
         end
         return true

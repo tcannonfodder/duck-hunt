@@ -34,7 +34,7 @@ module ObjectSchemas
 			end
 
 			def add_required_error
-				add_error("required")
+				add_error(ObjectSchemas::REQUIRED_MESSAGE)
 			end
 
 			def errors
@@ -44,7 +44,7 @@ module ObjectSchemas
 			protected
 
 			def add_error_if_type_mismatch(value)
-				add_error("does not match type") unless matches_type?(value)
+				add_error(ObjectSchemas::TYPE_MISMATCH_MESSAGE) unless matches_type?(value)
 			end
 
 			def check_validators(value)
