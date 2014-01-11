@@ -20,7 +20,7 @@ require 'bundler/setup'
 require 'minitest/autorun'
 require 'minitest/spec'
 require 'minitest/pride'
-require 'mocha'
+require 'mocha/setup'
 require 'set'
 require 'object-schemas'
 
