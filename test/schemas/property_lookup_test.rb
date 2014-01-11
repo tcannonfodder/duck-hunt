@@ -4,7 +4,7 @@ class PropertyLookupTestClass
   include ObjectSchemas::Schemas::PropertyLookup
 end
 
-describe ObjectSchemas::Schemas::SchemaDefinition, "Adding a property to the schema" do
+describe ObjectSchemas::Schemas::PropertyLookup, "Adding a property to the schema" do
   it "should raise a `NotImplementedError` if the property definition exists (classes using this module must implement `add_property`" do
     schema = PropertyLookupTestClass.new
     lambda {
