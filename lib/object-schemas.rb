@@ -48,6 +48,7 @@ module ObjectSchemas
 	class MethodNotDefined < StandardError; end
 	class AbstractClass < StandardError; end
 	class PropertyAlreadyDefined < StandardError; end
+  class ValidatorAlreadyDefined < StandardError; end
 
 	autoload :Schemas, File.dirname(__FILE__) + '/object-schemas/schemas.rb'
 	autoload :Properties, File.dirname(__FILE__) + '/object-schemas/properties.rb'
