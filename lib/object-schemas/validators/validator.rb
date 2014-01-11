@@ -1,5 +1,7 @@
 module ObjectSchemas
 	module Validators
-		# Our special validation rules will go here.
+		class Validator
+
+    end
 	end
 end

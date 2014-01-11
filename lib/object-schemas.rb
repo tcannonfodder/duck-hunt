@@ -51,4 +51,5 @@ module ObjectSchemas
 
 	autoload :Schemas, File.dirname(__FILE__) + '/object-schemas/schemas.rb'
 	autoload :Properties, File.dirname(__FILE__) + '/object-schemas/properties.rb'
+  autoload :Validators, File.dirname(__FILE__) + '/object-schemas/validators.rb'
 end
