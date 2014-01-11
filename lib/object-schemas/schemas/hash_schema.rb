@@ -20,12 +20,13 @@ module ObjectSchemas
         return @properties.dup
       end
 
-      def strict!
-        @strict_mode = true
+      def relaxed!
+        @strict_mode = false
       end
 
       def strict_mode
-        @strict_mode ||= false
+        @strict_mode = true if @strict_mode.nil?
+        return @strict_mode
       end
 
       def strict_mode?

@@ -22,27 +22,27 @@ describe ObjectSchemas::Schemas::HashSchema, "defining an object through a block
 		schema.properties["name"].required?.must_equal false
 	end
 
-	it "should default the `strict mode` to `false`" do
+	it "should default the `strict mode` to `true`" do
     schema = ObjectSchemas::Schemas::HashSchema.define do |s|
     end
 
-    schema.strict_mode.must_equal false
-    schema.strict_mode?.must_equal false
+    schema.strict_mode.must_equal true
+    schema.strict_mode?.must_equal true
   end
 end
 
 describe ObjectSchemas::Schemas::HashSchema, "defining an object without a block" do
-  it "should default the strict mode to false" do
+  it "should default the strict mode to true" do
     schema = ObjectSchemas::Schemas::HashSchema.new
-    schema.strict_mode.must_equal false
-    schema.strict_mode?.must_equal false
-  end
-
-  it "should allow the strict mode to be set" do
-    schema = ObjectSchemas::Schemas::HashSchema.new
-    schema.strict!
     schema.strict_mode.must_equal true
     schema.strict_mode?.must_equal true
+  end
+
+  it "should allow the strict mode to be set to false" do
+    schema = ObjectSchemas::Schemas::HashSchema.new
+    schema.relaxed!
+    schema.strict_mode.must_equal false
+    schema.strict_mode?.must_equal false
   end
 end
 
