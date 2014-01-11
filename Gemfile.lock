@@ -3,7 +3,10 @@ GEM
     columnize (0.3.6)
     linecache (0.46)
       rbx-require-relative (> 0.0.4)
+    metaclass (0.0.1)
     minitest (4.7.5)
+    mocha (0.13.3)
+      metaclass (~> 0.0.1)
     rbx-require-relative (0.0.9)
     ruby-debug (0.10.4)
       columnize (>= 0.1)
@@ -16,4 +19,5 @@ PLATFORMS
 
 DEPENDENCIES
   minitest
+  mocha
   ruby-debug

@@ -20,6 +20,7 @@ require 'bundler/setup'
 require 'minitest/autorun'
 require 'minitest/spec'
 require 'minitest/pride'
+require 'mocha'
 require 'object-schemas'
 
 #require some basic test classes (useful for testing modules independently)
