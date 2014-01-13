@@ -49,6 +49,7 @@ module ObjectSchemas
 	class AbstractClass < StandardError; end
 	class PropertyAlreadyDefined < StandardError; end
   class ValidatorAlreadyDefined < StandardError; end
+  class InvalidSchema < StandardError; end
 
   TYPE_MISMATCH_MESSAGE = "wrong type"
   REQUIRED_MESSAGE = "required"

@@ -8,7 +8,7 @@ describe ObjectSchemas::Schemas::HashSchema, "defining an object through a block
 		end
 
 		schema.properties.size.must_equal 1
-		schema.properties["name"].name.must_equal "name"
+		schema.properties["name"].wont_be_nil
 		schema.properties["name"].required?.must_equal true
 	end
 
@@ -18,7 +18,7 @@ describe ObjectSchemas::Schemas::HashSchema, "defining an object through a block
 		end
 
 		schema.properties.size.must_equal 1
-		schema.properties["name"].name.must_equal "name"
+		schema.properties["name"].wont_be_nil
 		schema.properties["name"].required?.must_equal false
 	end
 
@@ -52,7 +52,7 @@ describe ObjectSchemas::Schemas::HashSchema, "defining properties" do
 		schema = ObjectSchemas::Schemas::HashSchema.new
 		schema.test "name"
 		schema.properties.size.must_equal 1
-		schema.properties["name"].name.must_equal "name"
+		schema.properties["name"].wont_be_nil
 		schema.properties["name"].required.must_equal true
 		schema.properties["name"].required?.must_equal true
 	end
@@ -64,10 +64,10 @@ describe ObjectSchemas::Schemas::HashSchema, "defining properties" do
 
 		schema.properties.size.must_equal 2
 
-		schema.properties["name"].name.must_equal "name"
+		schema.properties["name"].wont_be_nil
 		schema.properties["name"].required.must_equal true
 		schema.properties["name"].required?.must_equal true
-		schema.properties["item"].name.must_equal "item"
+		schema.properties["item"].wont_be_nil
 		schema.properties["item"].required.must_equal true
 		schema.properties["item"].required?.must_equal true
 	end
@@ -79,13 +79,25 @@ describe ObjectSchemas::Schemas::HashSchema, "defining properties" do
 		schema.test "item", "required" => false
 
 		schema.properties.size.must_equal 2
-		schema.properties["name"].name.must_equal "name"
+		schema.properties["name"].wont_be_nil
 		schema.properties["name"].required.must_equal false
 		schema.properties["name"].required?.must_equal false
-		schema.properties["item"].name.must_equal "item"
+		schema.properties["item"].wont_be_nil
 		schema.properties["item"].required.must_equal false
 		schema.properties["item"].required?.must_equal false
 	end
+
+	it "should require that properties are named" do
+    schema = ObjectSchemas::Schemas::HashSchema.new
+    lambda{
+			schema.test
+    }.must_raise(ArgumentError)
+
+    lambda{
+      schema.test ""
+    }.must_raise(ArgumentError)
+  end
+
 
 	it "should prevent a property from being defined multiple times in a schema" do
 		schema = ObjectSchemas::Schemas::HashSchema.new

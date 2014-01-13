@@ -1,33 +1,18 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 describe ObjectSchemas::Properties::Property, "initialization" do
-  it "should require a name" do
-    lambda{
-      ObjectSchemas::Properties::Property.new(nil)
-    }.must_raise(ArgumentError)
-
-    lambda{
-      ObjectSchemas::Properties::Property.new("")
-    }.must_raise(ArgumentError)
-  end
-
-  it "should store the name provided" do
-     property = ObjectSchemas::Properties::Property.new("test")
-     property.name.must_equal "test"
-  end
-
   it "should make the property required by default" do
-    property = ObjectSchemas::Properties::Property.new("test")
+    property = ObjectSchemas::Properties::Property.new
     property.required.must_equal true
     property.required?.must_equal true
   end
 
   it "allow the requiredness to be changed via the options hash" do
-    property = ObjectSchemas::Properties::Property.new("test", :required => false)
+    property = ObjectSchemas::Properties::Property.new(:required => false)
     property.required.must_equal false
     property.required?.must_equal false
 
-    property = ObjectSchemas::Properties::Property.new("test", :required => true)
+    property = ObjectSchemas::Properties::Property.new(:required => true)
     property.required.must_equal true
     property.required?.must_equal true
   end
@@ -35,7 +20,7 @@ end
 
 describe ObjectSchemas::Properties::Property, "validation" do
   it "should be invalid if there's a type mismatch" do
-    property = ObjectSchemas::Properties::Property.new("test")
+    property = ObjectSchemas::Properties::Property.new
     property.stubs(:matches_type?).returns(false)
 
     property.valid?("herp").must_equal false
@@ -44,7 +29,7 @@ describe ObjectSchemas::Properties::Property, "validation" do
   end
 
   it "should use a validator defined during initialization when validating" do
-    property = ObjectSchemas::Properties::Property.new("test", :always_wrong => true)
+    property = ObjectSchemas::Properties::Property.new(:always_wrong => true)
     property.stubs(:matches_type?).returns(true)
     property.valid?("herp").must_equal false
     property.errors.size.must_equal 1
@@ -52,7 +37,7 @@ describe ObjectSchemas::Properties::Property, "validation" do
   end
 
   it "should support adding multiple validators during initialization" do
-    property = ObjectSchemas::Properties::Property.new("test", :always_wrong => true, :wrong_again => true)
+    property = ObjectSchemas::Properties::Property.new(:always_wrong => true, :wrong_again => true)
     property.stubs(:matches_type?).returns(true)
     property.valid?("herp").must_equal false
     property.errors.size.must_equal 2
@@ -60,7 +45,7 @@ describe ObjectSchemas::Properties::Property, "validation" do
   end
 
   it "should be valid if the type matches and no validators are added" do
-    property = ObjectSchemas::Properties::Property.new("test")
+    property = ObjectSchemas::Properties::Property.new
     property.stubs(:matches_type?).returns(true)
 
     property.valid?("herp").must_equal true
@@ -68,7 +53,7 @@ describe ObjectSchemas::Properties::Property, "validation" do
   end
 
   it "should be valid if the type matches and all validators pass" do
-    property = ObjectSchemas::Properties::Property.new("test", :always_right => true, :right_again => true)
+    property = ObjectSchemas::Properties::Property.new(:always_right => true, :right_again => true)
     property.stubs(:matches_type?).returns(true)
 
     property.valid?("herp").must_equal true
@@ -76,14 +61,14 @@ describe ObjectSchemas::Properties::Property, "validation" do
   end
 
   it "should add the 'required' error message if requested" do
-    property = ObjectSchemas::Properties::Property.new("test")
+    property = ObjectSchemas::Properties::Property.new
     property.add_required_error
     property.errors.size.must_equal 1
     property.errors.first.must_equal "required"
   end
 
   it "should raise NotImplementedError if `matches_type?` has not been defined (subclasses define it)" do
-    property = ObjectSchemas::Properties::Property.new("test")
+    property = ObjectSchemas::Properties::Property.new
     lambda{
       property.valid?("hello")
     }.must_raise(NotImplementedError)
@@ -92,7 +77,7 @@ end
 
 describe ObjectSchemas::Properties::Property, "validating multiple times" do
   before do
-    @property = ObjectSchemas::Properties::Property.new("test")
+    @property = ObjectSchemas::Properties::Property.new
     @property.stubs(:matches_type?).returns(true)
   end
 
@@ -127,17 +112,8 @@ describe ObjectSchemas::Properties::Property, "validating multiple times" do
 end
 
 describe ObjectSchemas::Properties::Property, "security" do
-  it "should ensure the name cannot be modified" do
-    property = ObjectSchemas::Properties::Property.new("test")
-    lambda{
-      property.name = "herp"
-    }.must_raise(NoMethodError)
-
-    property.name.must_equal "test"
-  end
-
   it "should ensure the required status cannot be modified" do
-    property = ObjectSchemas::Properties::Property.new("test", :required => true)
+    property = ObjectSchemas::Properties::Property.new(:required => true)
     lambda{
       property.required = false
     }.must_raise(NoMethodError)
@@ -146,7 +122,7 @@ describe ObjectSchemas::Properties::Property, "security" do
   end
 
   it "should ensure the list of validators cannot be accessed or modified" do
-    property = ObjectSchemas::Properties::Property.new("test")
+    property = ObjectSchemas::Properties::Property.new
 
     lambda{
       property.validators["malicious"] = "muwah ha ha"

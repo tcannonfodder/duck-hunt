@@ -7,13 +7,10 @@ module ObjectSchemas
 			# 2. The value provided `matches_type?`
 			# 3. Each of the attached validators returns `true` when `valid?` is called
 			include ObjectSchemas::Properties::ValidatorLookup
-			attr_reader :name
 			attr_reader :required
 
-			def initialize(name, options= {})
-				raise ArgumentError, "Property name cannot be blank" if name.nil? or name.empty?
+			def initialize(options= {})
 				options = {"required" => true}.merge(options.stringify_keys!)
-				@name = name
 				@required = options["required"]
 				@validators = {}
 				@errors = []
