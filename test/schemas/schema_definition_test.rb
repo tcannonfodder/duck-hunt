@@ -5,8 +5,9 @@ class SchemaDefinitionTestClass
 
   attr_accessor :other_value
 
-  def initialize
+  def initialize(options=nil)
     self.other_value = "hello"
+    self.other_value = options unless options.nil?
   end
 
   def setter!
@@ -36,5 +37,15 @@ describe ObjectSchemas::Schemas::SchemaDefinition, "defining an object through a
     schema.must_be_instance_of SchemaDefinitionTestClass
     schema.getter.must_equal 1
     schema.other_value.must_equal "hello"
+  end
+
+  it "should pass initialization parameters to the class when `define` is used" do
+    schema = SchemaDefinitionTestClass.define "neato!" do |s|
+      s.setter!
+    end
+
+    schema.must_be_instance_of SchemaDefinitionTestClass
+    schema.getter.must_equal 1
+    schema.other_value.must_equal "neato!"
   end
 end

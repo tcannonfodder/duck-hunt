@@ -15,7 +15,7 @@ module ObjectSchemas
 
 		  module ClassMethods
 		    def define(*args, &block)
-		    	instance = self.new
+		    	instance = self.new(*args)
 		    	instance.instance_eval(&block)
 		    	return instance
 		    end
