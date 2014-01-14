@@ -10,7 +10,10 @@ module ObjectSchemas
 
       require 'set'
 
-      def initialize(*var)
+      def initialize(var={})
+        options = {"strict_mode" => true, "allow_nil" => false}.merge(var.stringify_keys!)
+        @strict_mode = options["strict_mode"]
+        @allow_nil = options["allow_nil"]
         @properties = {}
         #a key-value pair of all the required properties in the schema, references objects in `@properties`
         @required_properties = {}
@@ -21,12 +24,7 @@ module ObjectSchemas
         return @properties.dup
       end
 
-      def relaxed!
-        @strict_mode = false
-      end
-
       def strict_mode
-        @strict_mode = true if @strict_mode.nil?
         return @strict_mode
       end
 
@@ -34,8 +32,21 @@ module ObjectSchemas
         return strict_mode
       end
 
+      def allow_nil
+        return @allow_nil
+      end
+
+      def allow_nil?
+        return @allow_nil
+      end
+
       def validate?(object_being_validated)
         @errors.clear #reset since we are revalidating
+        if object_being_validated.nil?
+          return true if allow_nil?
+          add_base_error_message(NIL_OBJECT_NOT_ALLOWED_MESSAGE)
+          return false
+        end
         return false unless matches_type?(object_being_validated)
         #now that we know the type matches, we can stringify the hash's keys
         object_being_validated.stringify_keys!

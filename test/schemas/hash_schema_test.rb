@@ -29,6 +29,14 @@ describe ObjectSchemas::Schemas::HashSchema, "defining an object through a block
     schema.strict_mode.must_equal true
     schema.strict_mode?.must_equal true
   end
+
+  it "should allow the strict mode to be set to false" do
+    schema = ObjectSchemas::Schemas::HashSchema.define :strict_mode => false do |s|
+    	s.test "name"
+    end
+    schema.strict_mode.must_equal false
+    schema.strict_mode?.must_equal false
+  end
 end
 
 describe ObjectSchemas::Schemas::HashSchema, "defining an object without a block" do
@@ -39,8 +47,7 @@ describe ObjectSchemas::Schemas::HashSchema, "defining an object without a block
   end
 
   it "should allow the strict mode to be set to false" do
-    schema = ObjectSchemas::Schemas::HashSchema.new
-    schema.relaxed!
+    schema = ObjectSchemas::Schemas::HashSchema.new(:strict_mode => false)
     schema.strict_mode.must_equal false
     schema.strict_mode?.must_equal false
   end
@@ -175,9 +182,8 @@ end
 
 describe ObjectSchemas::Schemas::HashSchema, "validation (relaxed mode)" do
 	it "should return false if the object provided is not a hash" do
-		schema = ObjectSchemas::Schemas::HashSchema.define do |s|
+		schema = ObjectSchemas::Schemas::HashSchema.define :strict_mode => false do |s|
 			s.test "name"
-			s.relaxed!
 		end
 
 		schema.validate?("hello").must_equal false
@@ -186,9 +192,8 @@ describe ObjectSchemas::Schemas::HashSchema, "validation (relaxed mode)" do
 	end
 
 	it "should return false if one of the properties is not valid" do
-		schema = ObjectSchemas::Schemas::HashSchema.define do |s|
+		schema = ObjectSchemas::Schemas::HashSchema.define :strict_mode => false do |s|
 			s.always_wrong_type "name"
-			s.relaxed!
 		end
 
 		schema.validate?({:name => "hello"}).must_equal false
@@ -197,10 +202,9 @@ describe ObjectSchemas::Schemas::HashSchema, "validation (relaxed mode)" do
 	end
 
 	it "should return false if the object is missing a required property" do
-		schema = ObjectSchemas::Schemas::HashSchema.define do |s|
+		schema = ObjectSchemas::Schemas::HashSchema.define :strict_mode => false do |s|
 			s.test "name", :required => true
 			s.always_right_type "hello", :required => false
-			s.relaxed!
 		end
 
 		schema.validate?({:hello => "hello"}).must_equal false
@@ -209,12 +213,30 @@ describe ObjectSchemas::Schemas::HashSchema, "validation (relaxed mode)" do
 	end
 
 	it "should return true if the schema has been set to relaxed mode and the hash provided has extra properties" do
-		schema = ObjectSchemas::Schemas::HashSchema.define do |s|
+		schema = ObjectSchemas::Schemas::HashSchema.define :strict_mode => false do |s|
 			s.always_right_type "name", :required => true
-			s.relaxed!
 		end
 
 		schema.validate?({:name => "hello", :hello => "hello"}).must_equal true
 		schema.errors.size.must_equal 0
 	end
+end
+
+describe ObjectSchemas::Schemas::HashSchema, "validating `allow nil`" do
+  it "should return false if nil is not allowed and a nil object is given" do
+    schema = ObjectSchemas::Schemas::HashSchema.define :allow_nil => false do |s|
+      s.test "name"
+    end
+    schema.validate?(nil).must_equal false
+    schema.errors.size.must_equal 1
+    schema.errors["base"].must_equal ["nil object not allowed"]
+  end
+
+  it "should return true if nil is allowed and a nil object is given" do
+    schema = ObjectSchemas::Schemas::HashSchema.define :allow_nil => true do |s|
+      s.test "name"
+    end
+    schema.validate?(nil).must_equal true
+    schema.errors.size.must_equal 0
+  end
 end
