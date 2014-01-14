@@ -109,6 +109,29 @@ describe ObjectSchemas::Schemas::ArraySchema, "defining an object through a bloc
     }.must_raise ObjectSchemas::InvalidSchema
   end
 
+  it "should pass a block down to the property that defines a single-type array" do
+    schema = ObjectSchemas::Schemas::ArraySchema.define do |s|
+      s.test_block_passed {1+1}
+    end
+
+    schema.single_type_property.block_passed.must_equal true
+  end
+
+  it "should pass a block down to the properties in a tuple array" do
+    schema = ObjectSchemas::Schemas::ArraySchema.define do |s|
+      s.items do |x|
+        x.test_block_passed {1+1}
+      end
+
+      s.optional_items do |y|
+        y.test_block_passed {1+1}
+      end
+    end
+
+    schema.tuple_properties.first.block_passed.must_equal true
+    schema.optional_tuple_properties.first.block_passed.must_equal true
+  end
+
   it "should require that a block be passed when setting tuple properties" do
     lambda{
       schema = ObjectSchemas::Schemas::ArraySchema.define do |s|

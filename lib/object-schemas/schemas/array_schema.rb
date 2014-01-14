@@ -114,10 +114,10 @@ module ObjectSchemas
 
       protected
 
-      def add_property(property_constant, *args)
+      def add_property(property_constant, *args, &block)
         raise InvalidSchema, "cannot mix single-type and tuple definitions" unless @tuple_properties.nil? and @optional_tuple_properties.nil?
         raise InvalidSchema, "single type property has already been defined for this schema" unless @single_type_property.nil?
-        @single_type_property = property_constant.new(*args)
+        @single_type_property = property_constant.new(*args, &block)
       end
 
 
@@ -238,8 +238,8 @@ module ObjectSchemas
 
         protected
 
-        def add_property(property_constant, *args)
-          @properties << property_constant.new(*args)
+        def add_property(property_constant, *args, &block)
+          @properties << property_constant.new(*args, &block)
         end
       end
     end

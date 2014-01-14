@@ -1,6 +1,13 @@
 class ObjectSchemas::Properties::Test < ObjectSchemas::Properties::Property
 end
 
+class ObjectSchemas::Properties::TestBlockPassed < ObjectSchemas::Properties::Property
+  attr_reader :block_passed
+  def initialize(options={}, &block)
+    @block_passed = true if block_given?
+  end
+end
+
 class ObjectSchemas::Properties::AlwaysRightType < ObjectSchemas::Properties::Property
   def matches_type?(value)
     return true

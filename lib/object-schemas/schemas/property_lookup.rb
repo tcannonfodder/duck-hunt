@@ -7,7 +7,7 @@ module ObjectSchemas
         #check if this property has been defined.
         if property_definition_exists?(property_symbol)
           property_constant = get_property_constant(property_symbol)
-          add_property(property_constant, *args)
+          add_property(property_constant, *args, &block)
         else
           super
         end
@@ -23,7 +23,7 @@ module ObjectSchemas
         ObjectSchemas::Properties.const_get(property)
       end
 
-      def add_property(property_constant, *args)
+      def add_property(property_constant, *args, &block)
         raise NotImplementedError
       end
     end

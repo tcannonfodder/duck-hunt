@@ -62,11 +62,11 @@ module ObjectSchemas
 
       protected
 
-      def add_property(property_constant, *args)
+      def add_property(property_constant, *args, &block)
         name = args.shift.to_s
         raise ArgumentError, "Property name cannot be blank" if name.nil? or name.empty?
         raise PropertyAlreadyDefined, "`#{name}` has already been defined in this schema" if @properties.has_key?(name)
-        @properties[name] = property_constant.new(*args)
+        @properties[name] = property_constant.new(*args, &block)
         if @properties[name].required?
           @required_properties[name] = @properties[name]
         end

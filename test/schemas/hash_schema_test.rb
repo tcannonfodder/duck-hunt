@@ -135,6 +135,15 @@ describe ObjectSchemas::Schemas::HashSchema, "defining properties" do
 			schema.required_properties = {:malicious => "mwuah ha ha"}
 		}.must_raise(NameError)
 	end
+
+  it "should pass a block down to the property being defined" do
+    schema = ObjectSchemas::Schemas::HashSchema.new
+    schema.test_block_passed "name" do
+      1+1
+    end
+
+    schema.properties["name"].block_passed.must_equal true
+  end
 end
 
 describe ObjectSchemas::Schemas::HashSchema, "validation (strict mode)" do
