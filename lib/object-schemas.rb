@@ -53,6 +53,7 @@ module ObjectSchemas
 
   TYPE_MISMATCH_MESSAGE = "wrong type"
   REQUIRED_MESSAGE = "required"
+  NIL_OBJECT_NOT_ALLOWED_MESSAGE = "nil object not allowed"
 
 	autoload :Schemas, File.dirname(__FILE__) + '/object-schemas/schemas.rb'
 	autoload :Properties, File.dirname(__FILE__) + '/object-schemas/properties.rb'
