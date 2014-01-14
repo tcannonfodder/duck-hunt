@@ -22,6 +22,7 @@ require 'minitest/spec'
 require 'minitest/pride'
 require 'mocha/setup'
 require 'set'
+require 'bigdecimal'
 require 'object-schemas'
 
 #require some basic test classes (useful for testing modules independently)
