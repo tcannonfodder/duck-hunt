@@ -1,4 +1,10 @@
+PATH
+  remote: .
+  specs:
+    object-schemas (0.0.1)
+
 GEM
+  remote: http://rubygems.org/
   specs:
     columnize (0.3.6)
     linecache (0.46)
@@ -7,6 +13,7 @@ GEM
     minitest (4.7.5)
     mocha (0.13.3)
       metaclass (~> 0.0.1)
+    rake (10.0.4)
     rbx-require-relative (0.0.9)
     ruby-debug (0.10.4)
       columnize (>= 0.1)
@@ -20,4 +27,6 @@ PLATFORMS
 DEPENDENCIES
   minitest
   mocha
+  object-schemas!
+  rake
   ruby-debug
