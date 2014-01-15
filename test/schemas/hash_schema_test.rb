@@ -187,6 +187,19 @@ describe ObjectSchemas::Schemas::HashSchema, "validation (strict mode)" do
 		schema.errors.size.must_equal 1
 		schema.errors["base"].must_equal ["has properties not defined in schema"]
 	end
+
+  it "should not retain the 'has properties not defined in schema' error message when validated twice" do
+    schema = ObjectSchemas::Schemas::HashSchema.define do |s|
+      s.always_right_type "name", :required => true
+    end
+
+    schema.validate?({:name => "hello", :hello => "hello"}).must_equal false
+    schema.errors.size.must_equal 1
+    schema.errors["base"].must_equal ["has properties not defined in schema"]
+
+    schema.validate?({:name => "hello"}).must_equal true
+    schema.errors.size.must_equal 0
+  end
 end
 
 describe ObjectSchemas::Schemas::HashSchema, "validation (relaxed mode)" do
