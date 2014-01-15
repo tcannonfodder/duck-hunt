@@ -249,14 +249,217 @@ describe ObjectSchemas::Properties::NestedHash, "validating `allow nil`" do
   end
 end
 
-describe ObjectSchemas::Properties::NestedHash, "Nesting in other schemas" do
-  it "should be able to be nested in an array schema" do
-    schema = ObjectSchemas::Schemas::ArraySchema.define do |s|
+describe ObjectSchemas::Properties::NestedHash, "Nesting in single-type array schemas" do
+  before do
+    @schema = ObjectSchemas::Schemas::ArraySchema.define do |s|
       s.nested_hash do |s|
-        s.test "name"
+        s.always_right_type "name", :required => true
       end
     end
+  end
 
-    schema.single_type_property.must_be_instance_of ObjectSchemas::Properties::NestedHash
+  it "should be able to be nested in an array schema" do
+    @schema.single_type_property.must_be_instance_of ObjectSchemas::Properties::NestedHash
+  end
+
+  it "should return true if the nested hashes are valid" do
+    @schema.validate?([{:name => "Hello"}, {:name => "World"}]).must_equal true
+    @schema.errors.size.must_equal 0
+  end
+
+  it "should return false if one of the nested hashes is invalid" do
+    @schema.validate?([{:name => "Hello"}, {:world => "World"}]).must_equal false
+    @schema.errors.size.must_equal 1
+    @schema.errors["1"].must_equal({"base" => ["has properties not defined in schema"]})
+
+    @schema.validate?([{:name => "Hello"}, {}]).must_equal false
+    @schema.errors.size.must_equal 1
+    @schema.errors["1"].must_equal({"name" => ["required"]})
+  end
+
+  it "should return false if both of the nested hashes are invalid" do
+    @schema.validate?([{}, {}]).must_equal false
+    @schema.errors.size.must_equal 2
+    @schema.errors["0"].must_equal({"name" => ["required"]})
+    @schema.errors["1"].must_equal({"name" => ["required"]})
+  end
+end
+
+describe ObjectSchemas::Properties::NestedHash, "Nesting in tuple array schemas (no optional properties)" do
+  before do
+    @schema = ObjectSchemas::Schemas::ArraySchema.define do |s|
+      s.items do |x|
+        x.nested_hash do |z|
+          z.always_right_type "name", :required => true
+        end
+
+        x.nested_hash do |y|
+          y.always_right_type "age", :required => true
+        end
+      end
+    end
+  end
+
+  it "should be able to be nested in an array schema" do
+    @schema.tuple_properties.each{|x| x.must_be_instance_of ObjectSchemas::Properties::NestedHash}
+  end
+
+  it "should return true if the nested hashes are valid" do
+    @schema.validate?([{:name => "Hello"}, {:age => "World"}]).must_equal true
+    @schema.errors.size.must_equal 0
+  end
+
+  it "should return false if one of the nested hashes is invalid" do
+    @schema.validate?([{:name => "Hello"}, {:world => "World"}]).must_equal false
+    @schema.errors.size.must_equal 1
+    @schema.errors["1"].must_equal({"base" => ["has properties not defined in schema"]})
+
+    @schema.validate?([{:name => "Hello"}, {}]).must_equal false
+    @schema.errors.size.must_equal 1
+    @schema.errors["1"].must_equal({"age" => ["required"]})
+  end
+
+  it "should return false if both of the nested hashes are invalid" do
+    @schema.validate?([{}, {}]).must_equal false
+    @schema.errors.size.must_equal 2
+    @schema.errors["0"].must_equal({"name" => ["required"]})
+    @schema.errors["1"].must_equal({"age" => ["required"]})
+  end
+end
+
+describe ObjectSchemas::Properties::NestedHash, "Nesting in tuple array schemas (with optional properties)" do
+  before do
+    @schema = ObjectSchemas::Schemas::ArraySchema.define do |s|
+      s.items do |x|
+        x.nested_hash do |z|
+          z.always_right_type "name", :required => true
+        end
+      end
+
+      s.optional_items do |w|
+        w.nested_hash do |y|
+          y.always_right_type "age", :required => true
+        end
+      end
+    end
+  end
+
+  it "should be able to be nested in an array schema" do
+    @schema.tuple_properties.each{|x| x.must_be_instance_of ObjectSchemas::Properties::NestedHash}
+    @schema.optional_tuple_properties.each{|x| x.must_be_instance_of ObjectSchemas::Properties::NestedHash}
+  end
+
+  it "should return true if the nested hashes are valid" do
+    @schema.validate?([{:name => "Hello"}, {:age => "World"}]).must_equal true
+    @schema.errors.size.must_equal 0
+  end
+
+  it "should return true if only the required hashes are provided" do
+    @schema.validate?([{:name => "Hello"}]).must_equal true
+    @schema.errors.size.must_equal 0
+  end
+
+  it "should return false if one of the nested hashes is invalid" do
+    @schema.validate?([{:name => "Hello"}, {:world => "World"}]).must_equal false
+    @schema.errors.size.must_equal 1
+    @schema.errors["1"].must_equal({"base" => ["has properties not defined in schema"]})
+
+    @schema.validate?([{:name => "Hello"}, {}]).must_equal false
+    @schema.errors.size.must_equal 1
+    @schema.errors["1"].must_equal({"age" => ["required"]})
+  end
+
+  it "should return false if both of the nested hashes are invalid" do
+    @schema.validate?([{}, {}]).must_equal false
+    @schema.errors.size.must_equal 2
+    @schema.errors["0"].must_equal({"name" => ["required"]})
+    @schema.errors["1"].must_equal({"age" => ["required"]})
+  end
+end
+
+describe ObjectSchemas::Properties::NestedHash, "Nesting in tuple array schemas (all optional properties)" do
+  before do
+    @schema = ObjectSchemas::Schemas::ArraySchema.define do |s|
+      s.optional_items do |x|
+        x.nested_hash do |z|
+          z.always_right_type "name", :required => true
+        end
+
+        x.nested_hash do |w|
+          w.always_right_type "age", :required => true
+        end
+      end
+    end
+  end
+
+  it "should be able to be nested in an array schema" do
+    @schema.optional_tuple_properties.each{|x| x.must_be_instance_of ObjectSchemas::Properties::NestedHash}
+  end
+
+  it "should return true if the nested hashes are valid" do
+    @schema.validate?([{:name => "Hello"}, {:age => "World"}]).must_equal true
+    @schema.errors.size.must_equal 0
+  end
+
+  it "should return true if no hashes are provided" do
+    @schema.validate?([]).must_equal true
+    @schema.errors.size.must_equal 0
+  end
+
+  it "should return false if one of the nested hashes is invalid" do
+    @schema.validate?([{:name => "Hello"}, {:world => "World"}]).must_equal false
+    @schema.errors.size.must_equal 1
+    @schema.errors["1"].must_equal({"base" => ["has properties not defined in schema"]})
+
+    @schema.validate?([{}, {:age => "World"}]).must_equal false
+    @schema.errors.size.must_equal 1
+    @schema.errors["0"].must_equal({"name" => ["required"]})
+  end
+
+  it "should return false if both of the nested hashes are invalid" do
+    @schema.validate?([{}, {}]).must_equal false
+    @schema.errors.size.must_equal 2
+    @schema.errors["0"].must_equal({"name" => ["required"]})
+    @schema.errors["1"].must_equal({"age" => ["required"]})
+  end
+end
+
+describe ObjectSchemas::Properties::NestedHash, "Nesting in hashes" do
+  before do
+    @schema = ObjectSchemas::Schemas::HashSchema.define do |s|
+      s.nested_hash "profile" do |x|
+        x.always_right_type "name", :required => true
+      end
+
+      s.nested_hash "info" do |x|
+        x.always_right_type "age", :required => true
+      end
+    end
+  end
+
+  it "should be able to be nested in an array schema" do
+    @schema.properties["profile"].must_be_instance_of ObjectSchemas::Properties::NestedHash
+  end
+
+  it "should return true if the nested hashes are valid" do
+    @schema.validate?({:profile => {:name => "John"}, :info => {:age => 35}}).must_equal true
+    @schema.errors.size.must_equal 0
+  end
+
+  it "should return false if one of the nested hashes is invalid" do
+    @schema.validate?({:profile => {:name => "John"}, :info => {:birthdate => 35}}).must_equal false
+    @schema.errors.size.must_equal 1
+    @schema.errors["info"].must_equal({"base" => ["has properties not defined in schema"]})
+
+    @schema.validate?({:profile => {:name => "John"}, :info => {}}).must_equal false
+    @schema.errors.size.must_equal 1
+    @schema.errors["info"].must_equal({"age" => ["required"]})
+  end
+
+  it "should return false if both of the nested hashes are invalid" do
+    @schema.validate?({:profile => {}, :info => {}}).must_equal false
+    @schema.errors.size.must_equal 2
+    @schema.errors["profile"].must_equal({"name" => ["required"]})
+    @schema.errors["info"].must_equal({"age" => ["required"]})
   end
 end
