@@ -8,5 +8,6 @@ module ObjectSchemas
     autoload :Array, File.dirname(__FILE__) + "/properties/array.rb"
     autoload :String, File.dirname(__FILE__) + "/properties/string.rb"
     autoload :Boolean, File.dirname(__FILE__) + "/properties/boolean.rb"
+    autoload :Nil, File.dirname(__FILE__) + "/properties/nil.rb"
 	end
 end
