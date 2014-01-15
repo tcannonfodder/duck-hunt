@@ -10,5 +10,7 @@ module ObjectSchemas
     autoload :NotEqualTo, File.dirname(__FILE__) + "/validators/not_equal_to.rb"
     autoload :DivisibleBy, File.dirname(__FILE__) + "/validators/divisible_by.rb"
     autoload :NotDivisibleBy, File.dirname(__FILE__) + "/validators/not_divisible_by.rb"
+    autoload :AcceptedValues, File.dirname(__FILE__) + "/validators/accepted_values.rb"
+    autoload :RejectedValues, File.dirname(__FILE__) + "/validators/rejected_values.rb"
   end
 end
