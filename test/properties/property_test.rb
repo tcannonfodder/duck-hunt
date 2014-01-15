@@ -7,6 +7,12 @@ describe ObjectSchemas::Properties::Property, "initialization" do
     property.required?.must_equal true
   end
 
+  it "should not allow nil objects by default" do
+    property = ObjectSchemas::Properties::Property.new
+    property.allow_nil.must_equal false
+    property.allow_nil?.must_equal false
+  end
+
   it "allow the requiredness to be changed via the options hash" do
     property = ObjectSchemas::Properties::Property.new(:required => false)
     property.required.must_equal false
@@ -57,6 +63,32 @@ describe ObjectSchemas::Properties::Property, "validation" do
     property.stubs(:matches_type?).returns(true)
 
     property.valid?("herp").must_equal true
+    property.errors.size.must_equal 0
+  end
+
+  it "should be valid if a nil object is allowed and a nil object is provided" do
+    property = ObjectSchemas::Properties::Property.new(:allow_nil => true)
+    property.valid?(nil).must_equal true
+    property.errors.size.must_equal 0
+  end
+
+  it "should be valid if a nil object is allowed and a nil object is provided, even if there are other validators that would be invalidated" do
+    property = ObjectSchemas::Properties::Property.new(:allow_nil => true, :always_wrong => true)
+    property.valid?(nil).must_equal true
+    property.errors.size.must_equal 0
+  end
+
+  it "should be invalid if a nil object is provided and nil objects are not allowed" do
+    property = ObjectSchemas::Properties::Property.new(:allow_nil => false)
+    property.valid?(nil).must_equal false
+    property.errors.size.must_equal 1
+    property.errors.first.must_equal "nil object not allowed"
+  end
+
+  it "should be valid if the type matches and all validators pass (even if a nil object is allowed)" do
+    property = ObjectSchemas::Properties::Property.new(:allow_nil => true, :always_right => true)
+    property.stubs(:matches_type?).returns(true)
+    property.valid?("hello").must_equal true
     property.errors.size.must_equal 0
   end
 

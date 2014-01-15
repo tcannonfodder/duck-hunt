@@ -7,15 +7,17 @@ module ObjectSchemas
 			# 2. The value provided `matches_type?`
 			# 3. Each of the attached validators returns `true` when `valid?` is called
 			include ObjectSchemas::Properties::ValidatorLookup
-			attr_reader :required
+			attr_reader :required, :allow_nil
 
 			def initialize(options= {})
-				options = {"required" => true}.merge(options.stringify_keys!)
-				@required = options["required"]
+				options = {"required" => true, "allow_nil" => false}.merge(options.stringify_keys!)
+				@required 	= options["required"]
+				@allow_nil = options["allow_nil"]
 				@validators = {}
 				@errors = []
 
 				options.delete("required")
+				options.delete("allow_nil")
 				options.each{ |key, value| find_and_create_validator(key, value) }
 			end
 
@@ -23,8 +25,17 @@ module ObjectSchemas
 				return self.required
 			end
 
+			def allow_nil?
+				return @allow_nil
+			end
+
 			def valid?(value)
 				@errors.clear
+				if value.nil?
+          return true if allow_nil?
+          add_error(NIL_OBJECT_NOT_ALLOWED_MESSAGE)
+          return false
+        end
 				add_error_if_type_mismatch(value)
 				check_validators(value)
 				return @errors.size == 0
