@@ -35,7 +35,7 @@ module ObjectSchemas
 			end
 
 			def errors
-				@errors
+				@errors.dup
 			end
 
 			protected

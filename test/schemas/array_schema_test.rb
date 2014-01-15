@@ -414,7 +414,7 @@ describe ObjectSchemas::Schemas::ArraySchema, "single-type validation" do
   it "should return false if any entry in the array is not of the correct type, and have a base error mesage" do
     @schema.validate?([1,"boo",3]).must_equal false
     @schema.errors.size.must_equal 1
-    @schema.errors["base"].must_equal ["wrong type at index 1"]
+    @schema.errors["1"].must_equal ["wrong type"]
   end
 end
 
@@ -455,7 +455,7 @@ describe ObjectSchemas::Schemas::ArraySchema, "tuple validation (no optional ite
   it "should return false if any of the items are not the correct type specified for that index" do
     @schema.validate?([1, "hello"]).must_equal false
     @schema.errors.size.must_equal 1
-    @schema.errors["base"].must_equal ["wrong type at index 1"]
+    @schema.errors["1"].must_equal ["wrong type"]
   end
 
   it "should return true if the items in the array match their defined type" do
@@ -505,13 +505,13 @@ describe ObjectSchemas::Schemas::ArraySchema, "tuple validation (with optional i
   it "should return false if any of the required items are not the correct type specified for that index" do
     @schema.validate?([1, "hello"]).must_equal false
     @schema.errors.size.must_equal 1
-    @schema.errors["base"].must_equal ["wrong type at index 1"]
+    @schema.errors["1"].must_equal ["wrong type"]
   end
 
   it "should return false if any of the optional items are not the correct type specified for that index" do
     @schema.validate?([1,2,"hello"]).must_equal false
     @schema.errors.size.must_equal 1
-    @schema.errors["base"].must_equal ["wrong type at index 2"]
+    @schema.errors["2"].must_equal ["wrong type"]
   end
 
   it "should return true if the items in the array match their defined type" do
@@ -559,7 +559,7 @@ describe ObjectSchemas::Schemas::ArraySchema, "tuple validation (all optional it
   it "should return false if any of the items are not the correct type specified for that index" do
     @schema.validate?(["hello",2]).must_equal false
     @schema.errors.size.must_equal 1
-    @schema.errors["base"].must_equal ["wrong type at index 0"]
+    @schema.errors["0"].must_equal ["wrong type"]
   end
 
   it "should return true if the items in the array match their defined type" do

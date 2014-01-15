@@ -148,6 +148,7 @@ module ObjectSchemas
 
       def validate_single_type?(object)
         object_size = object.size
+        object_valid = true
 
         if !min_size.nil? and object_size < min_size
           add_base_error_message(generate_under_minimum_message(min_size, object_size))
@@ -161,15 +162,17 @@ module ObjectSchemas
 
         object.each_with_index{ |item, index|
           unless single_type_property.valid?(item)
-            add_base_error_message(generate_wrong_type_message(index)) and return false 
+            @errors[index.to_s] = single_type_property.errors
+            object_valid = false
           end
         }
 
-        return true #passed all tests
+        return object_valid
       end
 
       def validate_tuple?(object)
         object_size = object.size
+        object_valid = true
 
         if object_size < minimum_tuple_size
           add_base_error_message(generate_under_minimum_message(minimum_tuple_size, object_size))
@@ -184,7 +187,10 @@ module ObjectSchemas
         unless tuple_properties.nil?
           # check that each required entry has the correct type in the tuple
           tuple_properties.each_with_index{ |property, index|
-            add_base_error_message(generate_wrong_type_message(index)) and return false unless property.valid?(object[index]) 
+            unless property.valid?(object[index])
+              @errors[index.to_s] = property.errors
+              object_valid = false
+            end
           }
         end
 
@@ -195,11 +201,14 @@ module ObjectSchemas
             if object_index > (object.size - 1)
               break #stop looking at optional properties if we've reached the end of the array
             end
-            add_base_error_message(generate_wrong_type_message(object_index)) and return false unless property.valid?(object[object_index]) 
+            unless property.valid?(object[object_index])
+              @errors[object_index.to_s] = property.errors
+              object_valid = false
+            end
           }
         end
 
-        return true #passed all tests
+        return object_valid
       end
 
       def minimum_tuple_size
@@ -217,10 +226,6 @@ module ObjectSchemas
 
       def generate_over_maximum_message(maximum_size, object_size)
         return "expected at most #{maximum_size} item(s) but got #{object_size} item(s)"
-      end
-
-      def generate_wrong_type_message(index)
-        return "wrong type at index #{index}"
       end
 
       class TupleProperties
