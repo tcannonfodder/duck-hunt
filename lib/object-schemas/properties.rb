@@ -7,5 +7,6 @@ module ObjectSchemas
     autoload :NestedHash, File.dirname(__FILE__) + "/properties/nested_hash.rb"
     autoload :Array, File.dirname(__FILE__) + "/properties/array.rb"
     autoload :String, File.dirname(__FILE__) + "/properties/string.rb"
+    autoload :Boolean, File.dirname(__FILE__) + "/properties/boolean.rb"
 	end
 end
