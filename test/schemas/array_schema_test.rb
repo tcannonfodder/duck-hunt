@@ -416,6 +416,16 @@ describe ObjectSchemas::Schemas::ArraySchema, "single-type validation" do
     @schema.errors.size.must_equal 1
     @schema.errors["1"].must_equal ["wrong type"]
   end
+
+  it "should empty the errors array each time we validate" do
+    @schema.validate?([1,"boo",3]).must_equal false
+    @schema.errors.size.must_equal 1
+    @schema.errors["1"].must_equal ["wrong type"]
+
+    @schema.validate?(["boo",2,3]).must_equal false
+    @schema.errors.size.must_equal 1
+    @schema.errors["0"].must_equal ["wrong type"]
+  end
 end
 
 describe ObjectSchemas::Schemas::ArraySchema, "tuple validation (no optional items)" do
@@ -461,6 +471,16 @@ describe ObjectSchemas::Schemas::ArraySchema, "tuple validation (no optional ite
   it "should return true if the items in the array match their defined type" do
     @schema.validate?([1, 2]).must_equal true
     @schema.errors.size.must_equal 0
+  end
+
+  it "should empty the errors array each time we validate" do
+    @schema.validate?([1, "hello"]).must_equal false
+    @schema.errors.size.must_equal 1
+    @schema.errors["1"].must_equal ["wrong type"]
+
+    @schema.validate?([1]).must_equal false
+    @schema.errors.size.must_equal 1
+    @schema.errors["base"].must_equal ["expected at least 2 item(s) but got 1 item(s)"]
   end
 end
 
@@ -528,6 +548,20 @@ describe ObjectSchemas::Schemas::ArraySchema, "tuple validation (with optional i
     @schema.validate?([1,2,3]).must_equal true
     @schema.errors.size.must_equal 0
   end
+
+  it "should empty the errors array each time we validate" do
+    @schema.validate?([1, "hello"]).must_equal false
+    @schema.errors.size.must_equal 1
+    @schema.errors["1"].must_equal ["wrong type"]
+
+    @schema.validate?([1]).must_equal false
+    @schema.errors.size.must_equal 1
+    @schema.errors["base"].must_equal ["expected at least 2 item(s) but got 1 item(s)"]
+
+    @schema.validate?([1,2,"hello"]).must_equal false
+    @schema.errors.size.must_equal 1
+    @schema.errors["2"].must_equal ["wrong type"]
+  end
 end
 
 describe ObjectSchemas::Schemas::ArraySchema, "tuple validation (all optional items)" do
@@ -570,6 +604,16 @@ describe ObjectSchemas::Schemas::ArraySchema, "tuple validation (all optional it
   it "should return true if we only have some of the optional items in the array" do
     @schema.validate?([1]).must_equal true
     @schema.errors.size.must_equal 0
+  end
+
+  it "should empty the errors array each time we validate" do
+    @schema.validate?(["hello",2]).must_equal false
+    @schema.errors.size.must_equal 1
+    @schema.errors["0"].must_equal ["wrong type"]
+
+    @schema.validate?([1,2,3]).must_equal false
+    @schema.errors.size.must_equal 1
+    @schema.errors["base"].must_equal ["expected at most 2 item(s) but got 3 item(s)"]
   end
 end
 

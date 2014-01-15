@@ -95,6 +95,7 @@ module ObjectSchemas
       end
 
       def validate?(object)
+        @errors.clear
         if object.nil?
           return true if allow_nil?
           add_base_error_message(NIL_OBJECT_NOT_ALLOWED_MESSAGE)
