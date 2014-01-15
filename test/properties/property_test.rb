@@ -109,6 +109,14 @@ describe ObjectSchemas::Properties::Property, "validating multiple times" do
     @property.valid?("herp").must_equal true
     @property.errors.size.must_equal 0
   end
+
+  it "should not add the required message twice" do
+    @property.stubs(:matches_type?).returns(false)
+    @property.add_required_error
+    @property.add_required_error
+    @property.errors.size.must_equal 1
+    @property.errors.must_equal ["required"]
+  end
 end
 
 describe ObjectSchemas::Properties::Property, "security" do

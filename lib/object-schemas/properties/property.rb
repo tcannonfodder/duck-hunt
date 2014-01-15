@@ -53,7 +53,7 @@ module ObjectSchemas
 			end
 
 			def add_error(error_message)
-				@errors << error_message
+				@errors << error_message unless @errors.include?(error_message)
 			end
 
 			def add_validator(validator_symbol, validator_constant, *args)
