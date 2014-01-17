@@ -10,7 +10,8 @@ module ObjectSchemas
 			attr_reader :required, :allow_nil
 
 			def initialize(options= {})
-				options = {"required" => true, "allow_nil" => false}.merge(options.stringify_keys!)
+				ObjectSchemas::HashHelpers.stringify_keys!(options)
+				options = {"required" => true, "allow_nil" => false}.merge(options)
 				@required 	= options["required"]
 				@allow_nil = options["allow_nil"]
 				@validators = {}

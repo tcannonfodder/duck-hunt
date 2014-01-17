@@ -11,7 +11,8 @@ module ObjectSchemas
       require 'set'
 
       def initialize(var={})
-        options = {"strict_mode" => true, "allow_nil" => false}.merge(var.stringify_keys!)
+        ObjectSchemas::HashHelpers.stringify_keys!(var)
+        options = {"strict_mode" => true, "allow_nil" => false}.merge(var)
         @strict_mode = options["strict_mode"]
         @allow_nil = options["allow_nil"]
         @properties = {}
@@ -49,7 +50,7 @@ module ObjectSchemas
         end
         return false unless matches_type?(object_being_validated)
         #now that we know the type matches, we can stringify the hash's keys
-        object_being_validated.stringify_keys!
+        ObjectSchemas::HashHelpers.stringify_keys!(object_being_validated)
         return false unless conforms_to_strict_mode_setting?(object_being_validated)
         return false unless objects_properties_are_valid_and_has_all_required_properties?(object_being_validated)
         return true
@@ -57,7 +58,7 @@ module ObjectSchemas
 
       def errors
         @properties.each{|name, property| @errors[name] = property.errors unless property.errors.empty?  }
-        return @errors.stringify_keys
+        return ObjectSchemas::HashHelpers.stringify_keys(@errors)
       end
 
       protected

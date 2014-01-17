@@ -7,7 +7,8 @@ module ObjectSchemas
 
       def initialize(options= {}, &block)
         raise ArgumentError, "a block must be given to define the array" unless block_given?
-        options = {"required" => true}.merge(options.stringify_keys!)
+        ObjectSchemas::HashHelpers.stringify_keys!(options)
+        options = {"required" => true}.merge(options)
         @required = options["required"]
         @required_but_not_present = false
         @schema = ObjectSchemas::Schemas::ArraySchema.define options, &block

@@ -31,7 +31,8 @@ module ObjectSchemas
       DUPLICATE_ITEMS_NOT_ALLOWED_MESSAGE = "duplicate items are not allowed"
 
       def initialize(var={})
-        options = {"validates_uniqueness" => false, "min_size" => nil, "max_size" => nil, "allow_nil" => false}.merge(var.stringify_keys!)
+        ObjectSchemas::HashHelpers.stringify_keys!(var)
+        options = {"validates_uniqueness" => false, "min_size" => nil, "max_size" => nil, "allow_nil" => false}.merge(var)
         @single_type_property  = nil
         @tuple_properties = nil
         @optional_tuple_properties = nil
@@ -81,7 +82,7 @@ module ObjectSchemas
       end
 
       def errors
-        return @errors.stringify_keys
+        return ObjectSchemas::HashHelpers.stringify_keys(@errors)
       end
 
       def items(&block)
