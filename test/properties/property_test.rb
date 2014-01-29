@@ -34,6 +34,15 @@ describe ObjectSchemas::Properties::Property, "validation" do
     property.errors.first.must_equal "wrong type"
   end
 
+  it "should not call the validators when there is a type mismatch" do
+    property = ObjectSchemas::Properties::Property.new(:always_wrong => true)
+    property.stubs(:matches_type?).returns(false)
+
+    property.valid?("herp").must_equal false
+    property.errors.size.must_equal 1
+    property.errors.first.must_equal "wrong type"
+  end
+
   it "should use a validator defined during initialization when validating" do
     property = ObjectSchemas::Properties::Property.new(:always_wrong => true)
     property.stubs(:matches_type?).returns(true)

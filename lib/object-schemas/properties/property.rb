@@ -37,8 +37,12 @@ module ObjectSchemas
           add_error(NIL_OBJECT_NOT_ALLOWED_MESSAGE)
           return false
         end
-				add_error_if_type_mismatch(value)
-				check_validators(value)
+
+        if matches_type?(value)
+					check_validators(value)
+				else
+					add_type_mismatch_error(value)
+				end
 				return @errors.size == 0
 			end
 
@@ -52,8 +56,8 @@ module ObjectSchemas
 
 			protected
 
-			def add_error_if_type_mismatch(value)
-				add_error(ObjectSchemas::TYPE_MISMATCH_MESSAGE) unless matches_type?(value)
+			def add_type_mismatch_error(value)
+				add_error(ObjectSchemas::TYPE_MISMATCH_MESSAGE)
 			end
 
 			def check_validators(value)
