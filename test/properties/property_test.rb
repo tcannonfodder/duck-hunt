@@ -43,6 +43,15 @@ describe ObjectSchemas::Properties::Property, "validation" do
     property.errors.first.must_equal "wrong type"
   end
 
+  it "should raise an exception if a validator raises an exception, since this is the clearest way to indicate the schema was not defined correctly" do
+    property = ObjectSchemas::Properties::Property.new(:always_raise_exception => true)
+    property.stubs(:matches_type?).returns(true)
+
+    lambda{
+      property.valid?("herp")
+    }.must_raise Exception
+  end
+
   it "should use a validator defined during initialization when validating" do
     property = ObjectSchemas::Properties::Property.new(:always_wrong => true)
     property.stubs(:matches_type?).returns(true)
@@ -56,7 +65,7 @@ describe ObjectSchemas::Properties::Property, "validation" do
     property.stubs(:matches_type?).returns(true)
     property.valid?("herp").must_equal false
     property.errors.size.must_equal 2
-    property.errors.to_set == ["Always Wrong", "Wrong Again"].to_set
+    property.errors.to_set.must_equal ["Always Wrong", "Wrong Again"].to_set
   end
 
   it "should be valid if the type matches and no validators are added" do

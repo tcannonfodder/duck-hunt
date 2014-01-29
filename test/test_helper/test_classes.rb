@@ -62,3 +62,13 @@ class ObjectSchemas::Validators::RightAgain < ObjectSchemas::Validators::Validat
     "Wha?"
   end
 end
+
+class ObjectSchemas::Validators::AlwaysRaiseException < ObjectSchemas::Validators::Validator
+  def valid?(value)
+    raise Exception, "Bad!"
+  end
+
+  def error_message
+    "Bad!"
+  end
+end
