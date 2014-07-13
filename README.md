@@ -43,7 +43,7 @@ class UserAPI
     # the rest of your API call
   end
 end
-~~~end
+~~~
 
 It's also *blazing fast*, since it's dependency-free and deals with plain Ruby objects.
 
