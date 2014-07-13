@@ -95,9 +95,6 @@ end
 schema.validate?(:name => "hey")
 #=> true
 
-schema.errors
-#=> {}
-
 schema.validate?(:name => 12)
 #=> false
 
@@ -138,9 +135,6 @@ end
 strict_schema.validate?({:name => "Jane"})
 #=> true
 
-strict_schema.errors
-#=> {}
-
 strict_schema.validate?({:name => "Jane", :age => 21})
 #=> false
 
@@ -160,14 +154,8 @@ end
 relaxed_schema.validate?({:name => "Jane"})
 #=> true
 
-relaxed_schema.errors
-#=> {}
-
 relaxed_schema.validate?({:name => "Jane", :age => 21})
 #=> true
-
-relaxed_schema.errors
-#=> {}
 ~~~
 
 
@@ -183,14 +171,8 @@ end
 nil_schema.validate?({:name => "Jane"})
 #=> true
 
-nil_schema.errors
-#=> {}
-
 nil_schema.validate?(nil)
 #=> true
-
-nil_schema.errors
-#=> {}
 ~~~
 
 #### Array Schemas
@@ -211,9 +193,6 @@ end
 schema.validate?([1,2,3])
 #=> true
 
-schema.errors
-#=> {}
-
 schema.validate?([1,"whoops",3])
 #=> false
 
@@ -231,9 +210,6 @@ end
 minimum_schema.validate?([1,2])
 #=> true
 
-minimum_schema.errors
-#=> {}
-
 minimum_schema.validate?([1])
 #=> false
 
@@ -248,9 +224,6 @@ end
 
 max_schema.validate?([1,2])
 #=> true
-
-max_schema.errors
-#=> {}
 
 max_schema.validate?([1,2,3])
 #=> false
@@ -273,14 +246,8 @@ max_schema.errors
 max_schema.validate?([1,2])
 #=> true
 
-max_schema.errors
-#=> {}
-
 max_schema.validate?([1,2,3])
 #=> true
-
-max_schema.errors
-#=> {}
 
 max_schema.validate?([1,2,3,4])
 #=> false
@@ -371,14 +338,8 @@ end
 nil_schema.validate?([1,2,3])
 #=> true
 
-nil_schema.errors
-#=> {}
-
 nil_schema.validate?(nil)
 #=> true
-
-nil_schema.errors
-#=> {}
 ~~~
 
 ### Properties
