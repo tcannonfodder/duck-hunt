@@ -122,7 +122,7 @@ end
 
 Any property added to the hash schema is required by default. You can change that behavior by adding `:required => false` to the property definition. For clarity, I recommend always setting the `:required` option.
 
-A property can only be defined in a schema once. Otherwise, a `ObjectSchemas:::PropertyAlreadyDefined` exception is thrown.
+A property can only be defined in a schema once. Otherwise, a `DuckHunt:::PropertyAlreadyDefined` exception is thrown.
 
 There are two types of validation for hash schemas: Strict and Relaxed. The validation type is controlled by the `:strict_mode` option in the `define` method.
 

@@ -1,8 +1,8 @@
 require File.expand_path('../../test_helper', __FILE__)
 
-describe ObjectSchemas::Properties::String, "validation" do
+describe DuckHunt::Properties::String, "validation" do
   before do
-    @property = ObjectSchemas::Properties::String.new
+    @property = DuckHunt::Properties::String.new
   end
 
   it "should be able to validate a string" do

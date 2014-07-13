@@ -1,29 +1,29 @@
-class ObjectSchemas::Properties::Test < ObjectSchemas::Properties::Property
+class DuckHunt::Properties::Test < DuckHunt::Properties::Property
 end
 
-class ObjectSchemas::Properties::TestBlockPassed < ObjectSchemas::Properties::Property
+class DuckHunt::Properties::TestBlockPassed < DuckHunt::Properties::Property
   attr_reader :block_passed
   def initialize(options={}, &block)
     @block_passed = true if block_given?
   end
 end
 
-class ObjectSchemas::Properties::AlwaysRightType < ObjectSchemas::Properties::Property
+class DuckHunt::Properties::AlwaysRightType < DuckHunt::Properties::Property
   def matches_type?(value)
     return true
   end
 end
 
-class ObjectSchemas::Properties::AlwaysWrongType < ObjectSchemas::Properties::Property
+class DuckHunt::Properties::AlwaysWrongType < DuckHunt::Properties::Property
   def matches_type?(value)
     return false
   end
 end
 
-class ObjectSchemas::Validators::Test < ObjectSchemas::Validators::Validator
+class DuckHunt::Validators::Test < DuckHunt::Validators::Validator
 end
 
-class ObjectSchemas::Validators::AlwaysWrong < ObjectSchemas::Validators::Validator
+class DuckHunt::Validators::AlwaysWrong < DuckHunt::Validators::Validator
   def valid?(value)
     return false
   end
@@ -33,7 +33,7 @@ class ObjectSchemas::Validators::AlwaysWrong < ObjectSchemas::Validators::Valida
   end
 end
 
-class ObjectSchemas::Validators::WrongAgain < ObjectSchemas::Validators::Validator
+class DuckHunt::Validators::WrongAgain < DuckHunt::Validators::Validator
   def valid?(value)
     return false
   end
@@ -43,7 +43,7 @@ class ObjectSchemas::Validators::WrongAgain < ObjectSchemas::Validators::Validat
   end
 end
 
-class ObjectSchemas::Validators::AlwaysRight < ObjectSchemas::Validators::Validator
+class DuckHunt::Validators::AlwaysRight < DuckHunt::Validators::Validator
   def valid?(value)
     return true
   end
@@ -53,7 +53,7 @@ class ObjectSchemas::Validators::AlwaysRight < ObjectSchemas::Validators::Valida
   end
 end
 
-class ObjectSchemas::Validators::RightAgain < ObjectSchemas::Validators::Validator
+class DuckHunt::Validators::RightAgain < DuckHunt::Validators::Validator
   def valid?(value)
     return true
   end
@@ -63,7 +63,7 @@ class ObjectSchemas::Validators::RightAgain < ObjectSchemas::Validators::Validat
   end
 end
 
-class ObjectSchemas::Validators::AlwaysRaiseException < ObjectSchemas::Validators::Validator
+class DuckHunt::Validators::AlwaysRaiseException < DuckHunt::Validators::Validator
   def valid?(value)
     raise Exception, "Bad!"
   end

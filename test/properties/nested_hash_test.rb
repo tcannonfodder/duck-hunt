@@ -1,8 +1,8 @@
 require File.expand_path('../../test_helper', __FILE__)
 
-describe ObjectSchemas::Properties::NestedHash, "initialize using a block" do
+describe DuckHunt::Properties::NestedHash, "initialize using a block" do
   it "should be able to set the property to required" do
-    property = ObjectSchemas::Properties::NestedHash.new :required => true do |s|
+    property = DuckHunt::Properties::NestedHash.new :required => true do |s|
       s.test "name"
     end
     property.required.must_equal true
@@ -10,15 +10,15 @@ describe ObjectSchemas::Properties::NestedHash, "initialize using a block" do
   end
 
   it "should be able to define the property" do
-    property = ObjectSchemas::Properties::NestedHash.new :required => true do |s|
+    property = DuckHunt::Properties::NestedHash.new :required => true do |s|
       s.test "name"
     end
 
-    property.properties["name"].must_be_instance_of ObjectSchemas::Properties::Test
+    property.properties["name"].must_be_instance_of DuckHunt::Properties::Test
   end
 
   it "should be able to set options for the property" do
-    property = ObjectSchemas::Properties::NestedHash.new :strict_mode => false do |s|
+    property = DuckHunt::Properties::NestedHash.new :strict_mode => false do |s|
       s.test "name"
     end
 
@@ -26,7 +26,7 @@ describe ObjectSchemas::Properties::NestedHash, "initialize using a block" do
   end
 
   it "should be able to set property-level and property-level options at the same time" do
-    property = ObjectSchemas::Properties::NestedHash.new :required => true, :strict_mode => false do |s|
+    property = DuckHunt::Properties::NestedHash.new :required => true, :strict_mode => false do |s|
       s.test "name"
     end
     property.required.must_equal true
@@ -35,7 +35,7 @@ describe ObjectSchemas::Properties::NestedHash, "initialize using a block" do
   end
 
   it "should default the `strict mode` to `true`" do
-    property = ObjectSchemas::Properties::NestedHash.new do |s|
+    property = DuckHunt::Properties::NestedHash.new do |s|
     end
 
     property.strict_mode.must_equal true
@@ -44,17 +44,17 @@ describe ObjectSchemas::Properties::NestedHash, "initialize using a block" do
 
 end
 
-describe ObjectSchemas::Properties::NestedHash, "initialize without a block" do
+describe DuckHunt::Properties::NestedHash, "initialize without a block" do
   it "should raise an exception if a block is not provided" do
     lambda{
-     ObjectSchemas::Properties::NestedHash.new :required => false
+     DuckHunt::Properties::NestedHash.new :required => false
     }.must_raise(ArgumentError)
   end
 end
 
-describe ObjectSchemas::Properties::NestedHash, "defining properties" do
+describe DuckHunt::Properties::NestedHash, "defining properties" do
   it "should be able to add a new property to the property, which is required by default" do
-    property = ObjectSchemas::Properties::NestedHash.new do |s|
+    property = DuckHunt::Properties::NestedHash.new do |s|
       s.test "name"
     end
 
@@ -65,7 +65,7 @@ describe ObjectSchemas::Properties::NestedHash, "defining properties" do
   end
 
   it "should allow a property to be explictly set as required" do
-    property = ObjectSchemas::Properties::NestedHash.new do |s|
+    property = DuckHunt::Properties::NestedHash.new do |s|
       s.test "name", :required => true
       s.test "item", "required" => true
     end
@@ -81,7 +81,7 @@ describe ObjectSchemas::Properties::NestedHash, "defining properties" do
   end
 
   it "should allow a property to be set as not required" do
-    property = ObjectSchemas::Properties::NestedHash.new do |s|
+    property = DuckHunt::Properties::NestedHash.new do |s|
       s.test "name", :required => false
       s.test "item", "required" => false
     end
@@ -97,13 +97,13 @@ describe ObjectSchemas::Properties::NestedHash, "defining properties" do
 
   it "should require that properties are named" do
     lambda{
-      ObjectSchemas::Properties::NestedHash.new do |s|
+      DuckHunt::Properties::NestedHash.new do |s|
         s.test
       end
     }.must_raise(ArgumentError)
 
     lambda{
-      ObjectSchemas::Properties::NestedHash.new do |s|
+      DuckHunt::Properties::NestedHash.new do |s|
         s.test ""
       end
     }.must_raise(ArgumentError)
@@ -112,15 +112,15 @@ describe ObjectSchemas::Properties::NestedHash, "defining properties" do
 
   it "should prevent a property from being defined multiple times in a property" do
     lambda {
-      property = ObjectSchemas::Properties::NestedHash.new do |s|
+      property = DuckHunt::Properties::NestedHash.new do |s|
         s.test "name"
         s.test "name"
       end
-    }.must_raise(ObjectSchemas::PropertyAlreadyDefined)
+    }.must_raise(DuckHunt::PropertyAlreadyDefined)
   end
 
   it "should ensure the list of properties cannot be modified" do
-    property = ObjectSchemas::Properties::NestedHash.new do |s|
+    property = DuckHunt::Properties::NestedHash.new do |s|
       s.test "name"
     end
 
@@ -135,7 +135,7 @@ describe ObjectSchemas::Properties::NestedHash, "defining properties" do
   end
 
   it "should ensure the list of required properties cannot be modified" do
-    property = ObjectSchemas::Properties::NestedHash.new do |s|
+    property = DuckHunt::Properties::NestedHash.new do |s|
       s.test "name"
     end
 
@@ -145,9 +145,9 @@ describe ObjectSchemas::Properties::NestedHash, "defining properties" do
   end
 end
 
-describe ObjectSchemas::Properties::NestedHash, "validation (strict mode)" do
+describe DuckHunt::Properties::NestedHash, "validation (strict mode)" do
   it "should return false if the object provided is not a hash" do
-    property = ObjectSchemas::Properties::NestedHash.new do |s|
+    property = DuckHunt::Properties::NestedHash.new do |s|
       s.test "name"
     end
 
@@ -157,7 +157,7 @@ describe ObjectSchemas::Properties::NestedHash, "validation (strict mode)" do
   end
 
   it "should return false if one of the properties is not valid" do
-    property = ObjectSchemas::Properties::NestedHash.new do |s|
+    property = DuckHunt::Properties::NestedHash.new do |s|
       s.always_wrong_type "name"
     end
 
@@ -167,7 +167,7 @@ describe ObjectSchemas::Properties::NestedHash, "validation (strict mode)" do
   end
 
   it "should return false if the object is missing a required property" do
-    property = ObjectSchemas::Properties::NestedHash.new do |s|
+    property = DuckHunt::Properties::NestedHash.new do |s|
       s.test "name", :required => true
       s.always_right_type "hello", :required => false
     end
@@ -178,7 +178,7 @@ describe ObjectSchemas::Properties::NestedHash, "validation (strict mode)" do
   end
 
   it "should return false if the property has been set to strict mode and the hash provided has extra properties" do
-    property = ObjectSchemas::Properties::NestedHash.new do |s|
+    property = DuckHunt::Properties::NestedHash.new do |s|
       s.test "name", :required => true
     end
 
@@ -188,9 +188,9 @@ describe ObjectSchemas::Properties::NestedHash, "validation (strict mode)" do
   end
 end
 
-describe ObjectSchemas::Properties::NestedHash, "validation (relaxed mode)" do
+describe DuckHunt::Properties::NestedHash, "validation (relaxed mode)" do
   it "should return false if the object provided is not a hash" do
-    property = ObjectSchemas::Properties::NestedHash.new :strict_mode => false do |s|
+    property = DuckHunt::Properties::NestedHash.new :strict_mode => false do |s|
       s.test "name"
     end
 
@@ -200,7 +200,7 @@ describe ObjectSchemas::Properties::NestedHash, "validation (relaxed mode)" do
   end
 
   it "should return false if one of the properties is not valid" do
-    property = ObjectSchemas::Properties::NestedHash.new :strict_mode => false do |s|
+    property = DuckHunt::Properties::NestedHash.new :strict_mode => false do |s|
       s.always_wrong_type "name"
     end
 
@@ -210,7 +210,7 @@ describe ObjectSchemas::Properties::NestedHash, "validation (relaxed mode)" do
   end
 
   it "should return false if the object is missing a required property" do
-    property = ObjectSchemas::Properties::NestedHash.new :strict_mode => false do |s|
+    property = DuckHunt::Properties::NestedHash.new :strict_mode => false do |s|
       s.test "name", :required => true
       s.always_right_type "hello", :required => false
     end
@@ -221,7 +221,7 @@ describe ObjectSchemas::Properties::NestedHash, "validation (relaxed mode)" do
   end
 
   it "should return true if the property has been set to relaxed mode and the hash provided has extra properties" do
-    property = ObjectSchemas::Properties::NestedHash.new :strict_mode => false do |s|
+    property = DuckHunt::Properties::NestedHash.new :strict_mode => false do |s|
       s.always_right_type "name", :required => true
     end
 
@@ -230,9 +230,9 @@ describe ObjectSchemas::Properties::NestedHash, "validation (relaxed mode)" do
   end
 end
 
-describe ObjectSchemas::Properties::NestedHash, "validating `allow nil`" do
+describe DuckHunt::Properties::NestedHash, "validating `allow nil`" do
   it "should return false if nil is not allowed and a nil object is given" do
-    property = ObjectSchemas::Properties::NestedHash.new :allow_nil => false do |s|
+    property = DuckHunt::Properties::NestedHash.new :allow_nil => false do |s|
       s.test "name"
     end
     property.valid?(nil).must_equal false
@@ -241,7 +241,7 @@ describe ObjectSchemas::Properties::NestedHash, "validating `allow nil`" do
   end
 
   it "should return true if nil is allowed and a nil object is given" do
-    property = ObjectSchemas::Properties::NestedHash.new :allow_nil => true do |s|
+    property = DuckHunt::Properties::NestedHash.new :allow_nil => true do |s|
       s.test "name"
     end
     property.valid?(nil).must_equal true
@@ -249,9 +249,9 @@ describe ObjectSchemas::Properties::NestedHash, "validating `allow nil`" do
   end
 end
 
-describe ObjectSchemas::Properties::NestedHash, "Nesting in single-type array schemas" do
+describe DuckHunt::Properties::NestedHash, "Nesting in single-type array schemas" do
   before do
-    @schema = ObjectSchemas::Schemas::ArraySchema.define do |s|
+    @schema = DuckHunt::Schemas::ArraySchema.define do |s|
       s.nested_hash do |s|
         s.always_right_type "name", :required => true
       end
@@ -259,7 +259,7 @@ describe ObjectSchemas::Properties::NestedHash, "Nesting in single-type array sc
   end
 
   it "should be able to be nested in an array schema" do
-    @schema.single_type_property.must_be_instance_of ObjectSchemas::Properties::NestedHash
+    @schema.single_type_property.must_be_instance_of DuckHunt::Properties::NestedHash
   end
 
   it "should return true if the nested hashes are valid" do
@@ -285,9 +285,9 @@ describe ObjectSchemas::Properties::NestedHash, "Nesting in single-type array sc
   end
 end
 
-describe ObjectSchemas::Properties::NestedHash, "Nesting in tuple array schemas (no optional properties)" do
+describe DuckHunt::Properties::NestedHash, "Nesting in tuple array schemas (no optional properties)" do
   before do
-    @schema = ObjectSchemas::Schemas::ArraySchema.define do |s|
+    @schema = DuckHunt::Schemas::ArraySchema.define do |s|
       s.items do |x|
         x.nested_hash do |z|
           z.always_right_type "name", :required => true
@@ -301,7 +301,7 @@ describe ObjectSchemas::Properties::NestedHash, "Nesting in tuple array schemas 
   end
 
   it "should be able to be nested in an array schema" do
-    @schema.tuple_properties.each{|x| x.must_be_instance_of ObjectSchemas::Properties::NestedHash}
+    @schema.tuple_properties.each{|x| x.must_be_instance_of DuckHunt::Properties::NestedHash}
   end
 
   it "should return true if the nested hashes are valid" do
@@ -327,9 +327,9 @@ describe ObjectSchemas::Properties::NestedHash, "Nesting in tuple array schemas 
   end
 end
 
-describe ObjectSchemas::Properties::NestedHash, "Nesting in tuple array schemas (with optional properties)" do
+describe DuckHunt::Properties::NestedHash, "Nesting in tuple array schemas (with optional properties)" do
   before do
-    @schema = ObjectSchemas::Schemas::ArraySchema.define do |s|
+    @schema = DuckHunt::Schemas::ArraySchema.define do |s|
       s.items do |x|
         x.nested_hash do |z|
           z.always_right_type "name", :required => true
@@ -345,8 +345,8 @@ describe ObjectSchemas::Properties::NestedHash, "Nesting in tuple array schemas 
   end
 
   it "should be able to be nested in an array schema" do
-    @schema.tuple_properties.each{|x| x.must_be_instance_of ObjectSchemas::Properties::NestedHash}
-    @schema.optional_tuple_properties.each{|x| x.must_be_instance_of ObjectSchemas::Properties::NestedHash}
+    @schema.tuple_properties.each{|x| x.must_be_instance_of DuckHunt::Properties::NestedHash}
+    @schema.optional_tuple_properties.each{|x| x.must_be_instance_of DuckHunt::Properties::NestedHash}
   end
 
   it "should return true if the nested hashes are valid" do
@@ -377,9 +377,9 @@ describe ObjectSchemas::Properties::NestedHash, "Nesting in tuple array schemas 
   end
 end
 
-describe ObjectSchemas::Properties::NestedHash, "Nesting in tuple array schemas (all optional properties)" do
+describe DuckHunt::Properties::NestedHash, "Nesting in tuple array schemas (all optional properties)" do
   before do
-    @schema = ObjectSchemas::Schemas::ArraySchema.define do |s|
+    @schema = DuckHunt::Schemas::ArraySchema.define do |s|
       s.optional_items do |x|
         x.nested_hash do |z|
           z.always_right_type "name", :required => true
@@ -393,7 +393,7 @@ describe ObjectSchemas::Properties::NestedHash, "Nesting in tuple array schemas 
   end
 
   it "should be able to be nested in an array schema" do
-    @schema.optional_tuple_properties.each{|x| x.must_be_instance_of ObjectSchemas::Properties::NestedHash}
+    @schema.optional_tuple_properties.each{|x| x.must_be_instance_of DuckHunt::Properties::NestedHash}
   end
 
   it "should return true if the nested hashes are valid" do
@@ -424,9 +424,9 @@ describe ObjectSchemas::Properties::NestedHash, "Nesting in tuple array schemas 
   end
 end
 
-describe ObjectSchemas::Properties::NestedHash, "Nesting in hashes" do
+describe DuckHunt::Properties::NestedHash, "Nesting in hashes" do
   before do
-    @schema = ObjectSchemas::Schemas::HashSchema.define do |s|
+    @schema = DuckHunt::Schemas::HashSchema.define do |s|
       s.nested_hash "profile" do |x|
         x.always_right_type "name", :required => true
       end
@@ -438,7 +438,7 @@ describe ObjectSchemas::Properties::NestedHash, "Nesting in hashes" do
   end
 
   it "should be able to be nested in an array schema" do
-    @schema.properties["profile"].must_be_instance_of ObjectSchemas::Properties::NestedHash
+    @schema.properties["profile"].must_be_instance_of DuckHunt::Properties::NestedHash
   end
 
   it "should return true if the nested hashes are valid" do

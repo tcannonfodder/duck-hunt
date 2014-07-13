@@ -1,27 +1,27 @@
 require File.expand_path('../../test_helper', __FILE__)
 
-describe ObjectSchemas::Validators::AcceptedValues, "initialization" do
+describe DuckHunt::Validators::AcceptedValues, "initialization" do
   it "should create an instance with the provided value" do
-    validator = ObjectSchemas::Validators::AcceptedValues.new([1,2,3])
+    validator = DuckHunt::Validators::AcceptedValues.new([1,2,3])
     validator.values.must_equal [1,2,3]
   end
 
   it "should raise an exception if a value is not provided" do
     lambda{
-      ObjectSchemas::Validators::AcceptedValues.new
+      DuckHunt::Validators::AcceptedValues.new
     }.must_raise ArgumentError
   end
 
   it "should raise an exception if the value provided is not a hash" do
     lambda{
-      ObjectSchemas::Validators::AcceptedValues.new(3)
+      DuckHunt::Validators::AcceptedValues.new(3)
     }.must_raise ArgumentError
   end
 end
 
-describe ObjectSchemas::Validators::AcceptedValues, "Validation" do
+describe DuckHunt::Validators::AcceptedValues, "Validation" do
   before do
-    @validator = ObjectSchemas::Validators::AcceptedValues.new([1,2,3])
+    @validator = DuckHunt::Validators::AcceptedValues.new([1,2,3])
   end
 
   it "returns true if the value provided is one of the accepted values" do
@@ -38,9 +38,9 @@ end
 
 
 
-describe ObjectSchemas::Validators::AcceptedValues, "error message" do
+describe DuckHunt::Validators::AcceptedValues, "error message" do
   it "should have the correct error message based on the value provided" do
-    validator = ObjectSchemas::Validators::AcceptedValues.new([1,2,3])
+    validator = DuckHunt::Validators::AcceptedValues.new([1,2,3])
     validator.error_message.must_equal "not an accepted value"
   end
 end

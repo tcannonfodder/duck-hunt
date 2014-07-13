@@ -1,14 +1,14 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class ValidatorLookupTestClass
-  include ObjectSchemas::Properties::ValidatorLookup
+  include DuckHunt::Properties::ValidatorLookup
 
   def add(name)
     find_and_create_validator(name, true)
   end
 end
 
-describe ObjectSchemas::Properties::ValidatorLookup, "Adding a validator to the property" do
+describe DuckHunt::Properties::ValidatorLookup, "Adding a validator to the property" do
   it "should raise a `NotImplementedError` if the validator definition exists (classes using this module must implement `add_validator`" do
     property = ValidatorLookupTestClass.new
     lambda {

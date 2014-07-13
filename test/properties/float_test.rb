@@ -1,8 +1,8 @@
 require File.expand_path('../../test_helper', __FILE__)
 
-describe ObjectSchemas::Properties::Float, "validation" do
+describe DuckHunt::Properties::Float, "validation" do
   before do
-    @property = ObjectSchemas::Properties::Float.new
+    @property = DuckHunt::Properties::Float.new
   end
 
   it "should be able to validate a float" do

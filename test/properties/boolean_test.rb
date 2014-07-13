@@ -1,8 +1,8 @@
 require File.expand_path('../../test_helper', __FILE__)
 
-describe ObjectSchemas::Properties::Boolean, "validation" do
+describe DuckHunt::Properties::Boolean, "validation" do
   before do
-    @property = ObjectSchemas::Properties::Boolean.new
+    @property = DuckHunt::Properties::Boolean.new
   end
 
   it "should be able to validate a boolean" do

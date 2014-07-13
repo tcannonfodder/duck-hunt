@@ -1,8 +1,8 @@
 require File.expand_path('../../test_helper', __FILE__)
 
-describe ObjectSchemas::Properties::Nil, "validation" do
+describe DuckHunt::Properties::Nil, "validation" do
   before do
-    @property = ObjectSchemas::Properties::Nil.new
+    @property = DuckHunt::Properties::Nil.new
   end
 
   it "should be able to validate a nil value" do

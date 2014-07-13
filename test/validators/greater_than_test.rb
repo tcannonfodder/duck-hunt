@@ -1,21 +1,21 @@
 require File.expand_path('../../test_helper', __FILE__)
 
-describe ObjectSchemas::Validators::GreaterThan, "initialization" do
+describe DuckHunt::Validators::GreaterThan, "initialization" do
   it "should create an instance with the provided value" do
-    validator = ObjectSchemas::Validators::GreaterThan.new(3)
+    validator = DuckHunt::Validators::GreaterThan.new(3)
     validator.value.must_equal 3
   end
 
   it "should raise an exception if a value is not provided" do
     lambda{
-      ObjectSchemas::Validators::GreaterThan.new
+      DuckHunt::Validators::GreaterThan.new
     }.must_raise ArgumentError
   end
 end
 
-describe ObjectSchemas::Validators::GreaterThan, "Validation" do
+describe DuckHunt::Validators::GreaterThan, "Validation" do
   before do
-    @validator = ObjectSchemas::Validators::GreaterThan.new(3)
+    @validator = DuckHunt::Validators::GreaterThan.new(3)
   end
 
   it "returns true if the value provided is greater than the value given" do
@@ -31,9 +31,9 @@ end
 
 
 
-describe ObjectSchemas::Validators::GreaterThan, "error message" do
+describe DuckHunt::Validators::GreaterThan, "error message" do
   it "should have the correct error message based on the value provided" do
-    validator = ObjectSchemas::Validators::GreaterThan.new(3)
+    validator = DuckHunt::Validators::GreaterThan.new(3)
     validator.error_message.must_equal "less than `3`"
   end
 end

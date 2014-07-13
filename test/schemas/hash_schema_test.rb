@@ -1,9 +1,9 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 
-describe ObjectSchemas::Schemas::HashSchema, "defining an object through a block" do
+describe DuckHunt::Schemas::HashSchema, "defining an object through a block" do
 	it "should be able to define a property in the schema" do
-		schema = ObjectSchemas::Schemas::HashSchema.define do |s|
+		schema = DuckHunt::Schemas::HashSchema.define do |s|
 			s.test "name"
 		end
 
@@ -13,7 +13,7 @@ describe ObjectSchemas::Schemas::HashSchema, "defining an object through a block
 	end
 
 	it "should be able to set the options of a property in the schema" do
-		schema = ObjectSchemas::Schemas::HashSchema.define do |s|
+		schema = DuckHunt::Schemas::HashSchema.define do |s|
 			s.test "name", :required => false
 		end
 
@@ -23,7 +23,7 @@ describe ObjectSchemas::Schemas::HashSchema, "defining an object through a block
 	end
 
 	it "should default the `strict mode` to `true`" do
-    schema = ObjectSchemas::Schemas::HashSchema.define do |s|
+    schema = DuckHunt::Schemas::HashSchema.define do |s|
     end
 
     schema.strict_mode.must_equal true
@@ -31,7 +31,7 @@ describe ObjectSchemas::Schemas::HashSchema, "defining an object through a block
   end
 
   it "should allow the strict mode to be set to false" do
-    schema = ObjectSchemas::Schemas::HashSchema.define :strict_mode => false do |s|
+    schema = DuckHunt::Schemas::HashSchema.define :strict_mode => false do |s|
     	s.test "name"
     end
     schema.strict_mode.must_equal false
@@ -39,24 +39,24 @@ describe ObjectSchemas::Schemas::HashSchema, "defining an object through a block
   end
 end
 
-describe ObjectSchemas::Schemas::HashSchema, "defining an object without a block" do
+describe DuckHunt::Schemas::HashSchema, "defining an object without a block" do
   it "should default the strict mode to true" do
-    schema = ObjectSchemas::Schemas::HashSchema.new
+    schema = DuckHunt::Schemas::HashSchema.new
     schema.strict_mode.must_equal true
     schema.strict_mode?.must_equal true
   end
 
   it "should allow the strict mode to be set to false" do
-    schema = ObjectSchemas::Schemas::HashSchema.new(:strict_mode => false)
+    schema = DuckHunt::Schemas::HashSchema.new(:strict_mode => false)
     schema.strict_mode.must_equal false
     schema.strict_mode?.must_equal false
   end
 end
 
 
-describe ObjectSchemas::Schemas::HashSchema, "defining properties" do
+describe DuckHunt::Schemas::HashSchema, "defining properties" do
 	it "should be able to add a new property to the schema, which is required by default" do
-		schema = ObjectSchemas::Schemas::HashSchema.new
+		schema = DuckHunt::Schemas::HashSchema.new
 		schema.test "name"
 		schema.properties.size.must_equal 1
 		schema.properties["name"].wont_be_nil
@@ -65,7 +65,7 @@ describe ObjectSchemas::Schemas::HashSchema, "defining properties" do
 	end
 
 	it "should allow a property to be explictly set as required" do
-		schema = ObjectSchemas::Schemas::HashSchema.new
+		schema = DuckHunt::Schemas::HashSchema.new
 		schema.test "name", :required => true
 		schema.test "item", "required" => true
 
@@ -80,7 +80,7 @@ describe ObjectSchemas::Schemas::HashSchema, "defining properties" do
 	end
 
 	it "should allow a property to be set as not required" do
-		schema = ObjectSchemas::Schemas::HashSchema.new
+		schema = DuckHunt::Schemas::HashSchema.new
 
 		schema.test "name", :required => false
 		schema.test "item", "required" => false
@@ -95,7 +95,7 @@ describe ObjectSchemas::Schemas::HashSchema, "defining properties" do
 	end
 
 	it "should require that properties are named" do
-    schema = ObjectSchemas::Schemas::HashSchema.new
+    schema = DuckHunt::Schemas::HashSchema.new
     lambda{
 			schema.test
     }.must_raise(ArgumentError)
@@ -107,16 +107,16 @@ describe ObjectSchemas::Schemas::HashSchema, "defining properties" do
 
 
 	it "should prevent a property from being defined multiple times in a schema" do
-		schema = ObjectSchemas::Schemas::HashSchema.new
+		schema = DuckHunt::Schemas::HashSchema.new
 		schema.test "name"
 
 		lambda {
 			schema.test "name"
-		}.must_raise(ObjectSchemas::PropertyAlreadyDefined)
+		}.must_raise(DuckHunt::PropertyAlreadyDefined)
 	end
 
 	it "should ensure the list of properties cannot be modified" do
-		schema = ObjectSchemas::Schemas::HashSchema.new
+		schema = DuckHunt::Schemas::HashSchema.new
 		schema.test "name"
 		schema.properties.size.must_equal 1
 
@@ -129,7 +129,7 @@ describe ObjectSchemas::Schemas::HashSchema, "defining properties" do
 	end
 
 	it "should ensure the list of required properties cannot be modified" do
-		schema = ObjectSchemas::Schemas::HashSchema.new
+		schema = DuckHunt::Schemas::HashSchema.new
 		schema.test "name"
 		lambda{
 			schema.required_properties = {:malicious => "mwuah ha ha"}
@@ -137,7 +137,7 @@ describe ObjectSchemas::Schemas::HashSchema, "defining properties" do
 	end
 
   it "should pass a block down to the property being defined" do
-    schema = ObjectSchemas::Schemas::HashSchema.new
+    schema = DuckHunt::Schemas::HashSchema.new
     schema.test_block_passed "name" do
       1+1
     end
@@ -146,9 +146,9 @@ describe ObjectSchemas::Schemas::HashSchema, "defining properties" do
   end
 end
 
-describe ObjectSchemas::Schemas::HashSchema, "validation (strict mode)" do
+describe DuckHunt::Schemas::HashSchema, "validation (strict mode)" do
 	it "should return false if the object provided is not a hash" do
-		schema = ObjectSchemas::Schemas::HashSchema.define do |s|
+		schema = DuckHunt::Schemas::HashSchema.define do |s|
 			s.test "name"
 		end
 
@@ -158,7 +158,7 @@ describe ObjectSchemas::Schemas::HashSchema, "validation (strict mode)" do
 	end
 
 	it "should return false if one of the properties is not valid" do
-		schema = ObjectSchemas::Schemas::HashSchema.define do |s|
+		schema = DuckHunt::Schemas::HashSchema.define do |s|
 			s.always_wrong_type "name"
 		end
 
@@ -168,7 +168,7 @@ describe ObjectSchemas::Schemas::HashSchema, "validation (strict mode)" do
 	end
 
 	it "should return false if the object is missing a required property" do
-		schema = ObjectSchemas::Schemas::HashSchema.define do |s|
+		schema = DuckHunt::Schemas::HashSchema.define do |s|
 			s.test "name", :required => true
 			s.always_right_type "hello", :required => false
 		end
@@ -179,7 +179,7 @@ describe ObjectSchemas::Schemas::HashSchema, "validation (strict mode)" do
 	end
 
 	it "should return false if the schema has been set to strict mode and the hash provided has extra properties" do
-		schema = ObjectSchemas::Schemas::HashSchema.define do |s|
+		schema = DuckHunt::Schemas::HashSchema.define do |s|
 			s.test "name", :required => true
 		end
 
@@ -189,7 +189,7 @@ describe ObjectSchemas::Schemas::HashSchema, "validation (strict mode)" do
 	end
 
   it "should not retain the 'has properties not defined in schema' error message when validated twice" do
-    schema = ObjectSchemas::Schemas::HashSchema.define do |s|
+    schema = DuckHunt::Schemas::HashSchema.define do |s|
       s.always_right_type "name", :required => true
     end
 
@@ -202,9 +202,9 @@ describe ObjectSchemas::Schemas::HashSchema, "validation (strict mode)" do
   end
 end
 
-describe ObjectSchemas::Schemas::HashSchema, "validation (relaxed mode)" do
+describe DuckHunt::Schemas::HashSchema, "validation (relaxed mode)" do
 	it "should return false if the object provided is not a hash" do
-		schema = ObjectSchemas::Schemas::HashSchema.define :strict_mode => false do |s|
+		schema = DuckHunt::Schemas::HashSchema.define :strict_mode => false do |s|
 			s.test "name"
 		end
 
@@ -214,7 +214,7 @@ describe ObjectSchemas::Schemas::HashSchema, "validation (relaxed mode)" do
 	end
 
 	it "should return false if one of the properties is not valid" do
-		schema = ObjectSchemas::Schemas::HashSchema.define :strict_mode => false do |s|
+		schema = DuckHunt::Schemas::HashSchema.define :strict_mode => false do |s|
 			s.always_wrong_type "name"
 		end
 
@@ -224,7 +224,7 @@ describe ObjectSchemas::Schemas::HashSchema, "validation (relaxed mode)" do
 	end
 
 	it "should return false if the object is missing a required property" do
-		schema = ObjectSchemas::Schemas::HashSchema.define :strict_mode => false do |s|
+		schema = DuckHunt::Schemas::HashSchema.define :strict_mode => false do |s|
 			s.test "name", :required => true
 			s.always_right_type "hello", :required => false
 		end
@@ -235,7 +235,7 @@ describe ObjectSchemas::Schemas::HashSchema, "validation (relaxed mode)" do
 	end
 
 	it "should return true if the schema has been set to relaxed mode and the hash provided has extra properties" do
-		schema = ObjectSchemas::Schemas::HashSchema.define :strict_mode => false do |s|
+		schema = DuckHunt::Schemas::HashSchema.define :strict_mode => false do |s|
 			s.always_right_type "name", :required => true
 		end
 
@@ -244,9 +244,9 @@ describe ObjectSchemas::Schemas::HashSchema, "validation (relaxed mode)" do
 	end
 end
 
-describe ObjectSchemas::Schemas::HashSchema, "validating `allow nil`" do
+describe DuckHunt::Schemas::HashSchema, "validating `allow nil`" do
   it "should return false if nil is not allowed and a nil object is given" do
-    schema = ObjectSchemas::Schemas::HashSchema.define :allow_nil => false do |s|
+    schema = DuckHunt::Schemas::HashSchema.define :allow_nil => false do |s|
       s.test "name"
     end
     schema.validate?(nil).must_equal false
@@ -255,7 +255,7 @@ describe ObjectSchemas::Schemas::HashSchema, "validating `allow nil`" do
   end
 
   it "should return true if nil is allowed and a nil object is given" do
-    schema = ObjectSchemas::Schemas::HashSchema.define :allow_nil => true do |s|
+    schema = DuckHunt::Schemas::HashSchema.define :allow_nil => true do |s|
       s.test "name"
     end
     schema.validate?(nil).must_equal true

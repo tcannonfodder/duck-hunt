@@ -23,7 +23,7 @@ require 'minitest/pride'
 require 'mocha/setup'
 require 'set'
 require 'bigdecimal'
-require 'object-schemas'
+require 'duck-hunt'
 
 #require some basic test classes (useful for testing modules independently)
 require 'test_helper/test_classes'

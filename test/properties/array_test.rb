@@ -1,8 +1,8 @@
 require File.expand_path('../../test_helper', __FILE__)
 
-describe ObjectSchemas::Properties::Array, "initialize using a block" do
+describe DuckHunt::Properties::Array, "initialize using a block" do
   it "should be able to set the property to required" do
-    property = ObjectSchemas::Properties::Array.new :required => true do |s|
+    property = DuckHunt::Properties::Array.new :required => true do |s|
       s.test
     end
     property.required.must_equal true
@@ -10,26 +10,26 @@ describe ObjectSchemas::Properties::Array, "initialize using a block" do
   end
 
   it "should be able to define a single-type array" do
-    property = ObjectSchemas::Properties::Array.new do |s|
+    property = DuckHunt::Properties::Array.new do |s|
       s.integer
     end
 
-    property.single_type_property.must_be_instance_of ObjectSchemas::Properties::Integer
+    property.single_type_property.must_be_instance_of DuckHunt::Properties::Integer
     property.tuple_properties.must_be_nil
     property.optional_tuple_properties.must_be_nil
   end
 
   it "should be able to define a tuple array with no optional items" do
-    property = ObjectSchemas::Properties::Array.new do |s|
+    property = DuckHunt::Properties::Array.new do |s|
       s.items do |x|
         x.integer
       end
     end
 
     property.tuple_properties.size.must_equal 1
-    property.tuple_properties.first.must_be_instance_of ObjectSchemas::Properties::Integer
+    property.tuple_properties.first.must_be_instance_of DuckHunt::Properties::Integer
 
-    property = ObjectSchemas::Properties::Array.new do |s|
+    property = DuckHunt::Properties::Array.new do |s|
       s.items do |x|
         x.integer
         x.test
@@ -37,12 +37,12 @@ describe ObjectSchemas::Properties::Array, "initialize using a block" do
     end
 
     property.tuple_properties.size.must_equal 2
-    property.tuple_properties.first.must_be_instance_of ObjectSchemas::Properties::Integer
-    property.tuple_properties.last.must_be_instance_of ObjectSchemas::Properties::Test
+    property.tuple_properties.first.must_be_instance_of DuckHunt::Properties::Integer
+    property.tuple_properties.last.must_be_instance_of DuckHunt::Properties::Test
   end
 
   it "should be able to define a tuple array with optional items" do
-    property = ObjectSchemas::Properties::Array.new do |s|
+    property = DuckHunt::Properties::Array.new do |s|
       s.items do |x|
         x.integer
       end
@@ -54,13 +54,13 @@ describe ObjectSchemas::Properties::Array, "initialize using a block" do
     end
 
     property.tuple_properties.size.must_equal 1
-    property.tuple_properties.first.must_be_instance_of ObjectSchemas::Properties::Integer
+    property.tuple_properties.first.must_be_instance_of DuckHunt::Properties::Integer
 
     property.optional_tuple_properties.size.must_equal 2
-    property.optional_tuple_properties.first.must_be_instance_of ObjectSchemas::Properties::Integer
-    property.optional_tuple_properties.last.must_be_instance_of ObjectSchemas::Properties::Test
+    property.optional_tuple_properties.first.must_be_instance_of DuckHunt::Properties::Integer
+    property.optional_tuple_properties.last.must_be_instance_of DuckHunt::Properties::Test
 
-    property = ObjectSchemas::Properties::Array.new do |s|
+    property = DuckHunt::Properties::Array.new do |s|
       s.items do |x|
         x.integer
         x.test
@@ -72,53 +72,53 @@ describe ObjectSchemas::Properties::Array, "initialize using a block" do
     end
 
     property.tuple_properties.size.must_equal 2
-    property.tuple_properties.first.must_be_instance_of ObjectSchemas::Properties::Integer
-    property.tuple_properties.last.must_be_instance_of ObjectSchemas::Properties::Test
+    property.tuple_properties.first.must_be_instance_of DuckHunt::Properties::Integer
+    property.tuple_properties.last.must_be_instance_of DuckHunt::Properties::Test
 
     property.optional_tuple_properties.size.must_equal 1
-    property.optional_tuple_properties.first.must_be_instance_of ObjectSchemas::Properties::Integer
+    property.optional_tuple_properties.first.must_be_instance_of DuckHunt::Properties::Integer
   end
 
   it "should not allow single-type and tuple definitions in the same property" do
     lambda{
-      property = ObjectSchemas::Properties::Array.new do |s|
+      property = DuckHunt::Properties::Array.new do |s|
         s.integer
         s.items do |x|
           x.integer
         end
       end
-    }.must_raise ObjectSchemas::InvalidSchema
+    }.must_raise DuckHunt::InvalidSchema
 
     lambda{
-      property = ObjectSchemas::Properties::Array.new do |s|
+      property = DuckHunt::Properties::Array.new do |s|
         s.items do |x|
           x.integer
         end
         s.integer
       end
-    }.must_raise ObjectSchemas::InvalidSchema
+    }.must_raise DuckHunt::InvalidSchema
 
     lambda{
-      property = ObjectSchemas::Properties::Array.new do |s|
+      property = DuckHunt::Properties::Array.new do |s|
         s.integer
         s.optional_items do |x|
           x.integer
         end
       end
-    }.must_raise ObjectSchemas::InvalidSchema
+    }.must_raise DuckHunt::InvalidSchema
 
     lambda{
-      property = ObjectSchemas::Properties::Array.new do |s|
+      property = DuckHunt::Properties::Array.new do |s|
         s.optional_items do |x|
           x.integer
         end
         s.integer
       end
-    }.must_raise ObjectSchemas::InvalidSchema
+    }.must_raise DuckHunt::InvalidSchema
   end
 
   it "should be able to set options for the property" do
-    property = ObjectSchemas::Properties::Array.new :min_size => 3 do |s|
+    property = DuckHunt::Properties::Array.new :min_size => 3 do |s|
       s.test
     end
 
@@ -126,7 +126,7 @@ describe ObjectSchemas::Properties::Array, "initialize using a block" do
   end
 
   it "should be able to set property-level and property-level options at the same time" do
-    property = ObjectSchemas::Properties::Array.new :required => true, :min_size => 3 do |s|
+    property = DuckHunt::Properties::Array.new :required => true, :min_size => 3 do |s|
       s.test
     end
     property.required.must_equal true
@@ -136,20 +136,20 @@ describe ObjectSchemas::Properties::Array, "initialize using a block" do
 
   it "should require that a block be passed when setting tuple properties" do
     lambda{
-      property = ObjectSchemas::Properties::Array.new do |s|
+      property = DuckHunt::Properties::Array.new do |s|
         s.items
       end
     }.must_raise ArgumentError
 
     lambda{
-      property = ObjectSchemas::Properties::Array.new do |s|
+      property = DuckHunt::Properties::Array.new do |s|
         s.optional_items
       end
     }.must_raise ArgumentError
   end
 
   it "should allow the uniqueness flag to be set during initialization" do
-    property = ObjectSchemas::Properties::Array.new :validates_uniqueness => true do |s|
+    property = DuckHunt::Properties::Array.new :validates_uniqueness => true do |s|
       s.integer
     end
 
@@ -158,21 +158,21 @@ describe ObjectSchemas::Properties::Array, "initialize using a block" do
   end
 
   it "should allow the min and max size to be set during initialization" do
-    property = ObjectSchemas::Properties::Array.new :min_size => 10 do |s|
+    property = DuckHunt::Properties::Array.new :min_size => 10 do |s|
       s.integer
     end
 
     property.min_size.must_equal 10
     property.max_size.must_be_nil
 
-    property = ObjectSchemas::Properties::Array.new :max_size => 10 do |s|
+    property = DuckHunt::Properties::Array.new :max_size => 10 do |s|
       s.integer
     end
 
     property.min_size.must_be_nil
     property.max_size.must_equal 10
 
-    property = ObjectSchemas::Properties::Array.new :min_size => 5, :max_size => 10 do |s|
+    property = DuckHunt::Properties::Array.new :min_size => 5, :max_size => 10 do |s|
       s.integer
     end
 
@@ -181,7 +181,7 @@ describe ObjectSchemas::Properties::Array, "initialize using a block" do
   end
 
   it "should allow the 'allow nil' flag to be set during initialization" do
-    property = ObjectSchemas::Properties::Array.new :allow_nil => true do |s|
+    property = DuckHunt::Properties::Array.new :allow_nil => true do |s|
       s.integer
     end
 
@@ -190,7 +190,7 @@ describe ObjectSchemas::Properties::Array, "initialize using a block" do
   end
 
   it "should default the uniqueness flag to false" do
-    property = ObjectSchemas::Properties::Array.new do |s|
+    property = DuckHunt::Properties::Array.new do |s|
       s.integer
     end
 
@@ -199,7 +199,7 @@ describe ObjectSchemas::Properties::Array, "initialize using a block" do
   end
 
   it "should default the min and max size to nil" do
-    property = ObjectSchemas::Properties::Array.new do |s|
+    property = DuckHunt::Properties::Array.new do |s|
       s.integer
     end
 
@@ -208,7 +208,7 @@ describe ObjectSchemas::Properties::Array, "initialize using a block" do
   end
 
   it "should default the 'allow nil' flag to false" do
-    property = ObjectSchemas::Properties::Array.new do |s|
+    property = DuckHunt::Properties::Array.new do |s|
       s.integer
     end
 
@@ -217,17 +217,17 @@ describe ObjectSchemas::Properties::Array, "initialize using a block" do
   end
 end
 
-describe ObjectSchemas::Properties::Array, "initialize without a block" do
+describe DuckHunt::Properties::Array, "initialize without a block" do
   it "should raise an exception if a block is not provided" do
     lambda{
-     ObjectSchemas::Properties::Array.new :required => false
+     DuckHunt::Properties::Array.new :required => false
     }.must_raise(ArgumentError)
   end
 end
 
-describe ObjectSchemas::Properties::Array, "single-type validation" do
+describe DuckHunt::Properties::Array, "single-type validation" do
   before do
-    @property = ObjectSchemas::Properties::Array.new do |s|
+    @property = DuckHunt::Properties::Array.new do |s|
       s.integer
     end
   end
@@ -265,9 +265,9 @@ describe ObjectSchemas::Properties::Array, "single-type validation" do
   end
 end
 
-describe ObjectSchemas::Properties::Array, "tuple validation (no optional items)" do
+describe DuckHunt::Properties::Array, "tuple validation (no optional items)" do
   before do
-    @property = ObjectSchemas::Properties::Array.new do |s|
+    @property = DuckHunt::Properties::Array.new do |s|
       s.items do |x|
         x.always_right_type
         x.integer
@@ -321,9 +321,9 @@ describe ObjectSchemas::Properties::Array, "tuple validation (no optional items)
   end
 end
 
-describe ObjectSchemas::Properties::Array, "tuple validation (with optional items)" do
+describe DuckHunt::Properties::Array, "tuple validation (with optional items)" do
   before do
-    @property = ObjectSchemas::Properties::Array.new do |s|
+    @property = DuckHunt::Properties::Array.new do |s|
       s.items do |x|
         x.always_right_type
         x.integer
@@ -401,9 +401,9 @@ describe ObjectSchemas::Properties::Array, "tuple validation (with optional item
   end
 end
 
-describe ObjectSchemas::Properties::Array, "tuple validation (all optional items)" do
+describe DuckHunt::Properties::Array, "tuple validation (all optional items)" do
   before do
-    @property = ObjectSchemas::Properties::Array.new do |s|
+    @property = DuckHunt::Properties::Array.new do |s|
       s.optional_items do |y|
         y.integer
         y.always_right_type
@@ -454,9 +454,9 @@ describe ObjectSchemas::Properties::Array, "tuple validation (all optional items
   end
 end
 
-describe ObjectSchemas::Properties::Array, "validating uniqueness" do
+describe DuckHunt::Properties::Array, "validating uniqueness" do
   it "should return false if there were duplicates in a single-type array" do
-    property = ObjectSchemas::Properties::Array.new :validates_uniqueness => true do |s|
+    property = DuckHunt::Properties::Array.new :validates_uniqueness => true do |s|
       s.integer
     end
 
@@ -466,7 +466,7 @@ describe ObjectSchemas::Properties::Array, "validating uniqueness" do
   end
 
   it "should return false if there were duplicates in a tuple array (no optional items)" do
-    property = ObjectSchemas::Properties::Array.new :validates_uniqueness => true do |s|
+    property = DuckHunt::Properties::Array.new :validates_uniqueness => true do |s|
       s.items do |x|
         x.integer
         x.integer
@@ -480,7 +480,7 @@ describe ObjectSchemas::Properties::Array, "validating uniqueness" do
   end
 
   it "should return false if there were duplicates in a tuple array (with optional items)" do
-    property = ObjectSchemas::Properties::Array.new :validates_uniqueness => true do |s|
+    property = DuckHunt::Properties::Array.new :validates_uniqueness => true do |s|
       s.items do |x|
         x.integer
         x.integer
@@ -497,7 +497,7 @@ describe ObjectSchemas::Properties::Array, "validating uniqueness" do
   end
 
   it "should return false if there were duplicates in a tuple array (all optional items)" do
-    property = ObjectSchemas::Properties::Array.new :validates_uniqueness => true do |s|
+    property = DuckHunt::Properties::Array.new :validates_uniqueness => true do |s|
       s.optional_items do |x|
         x.integer
         x.integer
@@ -511,9 +511,9 @@ describe ObjectSchemas::Properties::Array, "validating uniqueness" do
   end
 end
 
-describe ObjectSchemas::Properties::Array, "validating minimum size" do
+describe DuckHunt::Properties::Array, "validating minimum size" do
   it "should return false if there were not enough items in a single-type array" do
-    property = ObjectSchemas::Properties::Array.new :min_size => 3 do |s|
+    property = DuckHunt::Properties::Array.new :min_size => 3 do |s|
       s.integer
     end
 
@@ -523,7 +523,7 @@ describe ObjectSchemas::Properties::Array, "validating minimum size" do
   end
 
   it "should return true if there were just enough items in a single-type array" do
-    property = ObjectSchemas::Properties::Array.new :min_size => 3 do |s|
+    property = DuckHunt::Properties::Array.new :min_size => 3 do |s|
       s.integer
     end
 
@@ -532,7 +532,7 @@ describe ObjectSchemas::Properties::Array, "validating minimum size" do
   end
 
   it "should return true if there were more than enough items in a single-type array" do
-    property = ObjectSchemas::Properties::Array.new :min_size => 3 do |s|
+    property = DuckHunt::Properties::Array.new :min_size => 3 do |s|
       s.integer
     end
 
@@ -541,9 +541,9 @@ describe ObjectSchemas::Properties::Array, "validating minimum size" do
   end
 end
 
-describe ObjectSchemas::Properties::Array, "validating maximum size" do
+describe DuckHunt::Properties::Array, "validating maximum size" do
   it "should return false if there were too many items in a single-type array" do
-    property = ObjectSchemas::Properties::Array.new :max_size => 3 do |s|
+    property = DuckHunt::Properties::Array.new :max_size => 3 do |s|
       s.integer
     end
 
@@ -553,7 +553,7 @@ describe ObjectSchemas::Properties::Array, "validating maximum size" do
   end
 
   it "should return true if we were at the limit of items in a single-type array" do
-    property = ObjectSchemas::Properties::Array.new :max_size => 3 do |s|
+    property = DuckHunt::Properties::Array.new :max_size => 3 do |s|
       s.integer
     end
 
@@ -562,7 +562,7 @@ describe ObjectSchemas::Properties::Array, "validating maximum size" do
   end
 
   it "should return true if we were not close to the limit in a single-type array" do
-    property = ObjectSchemas::Properties::Array.new :max_size => 3 do |s|
+    property = DuckHunt::Properties::Array.new :max_size => 3 do |s|
       s.integer
     end
 
@@ -571,9 +571,9 @@ describe ObjectSchemas::Properties::Array, "validating maximum size" do
   end
 end
 
-describe ObjectSchemas::Properties::Array, "validating minimum and maximum size" do
+describe DuckHunt::Properties::Array, "validating minimum and maximum size" do
   before do
-    @property = ObjectSchemas::Properties::Array.new :min_size => 3, :max_size => 5 do |s|
+    @property = DuckHunt::Properties::Array.new :min_size => 3, :max_size => 5 do |s|
       s.integer
     end
   end
@@ -606,7 +606,7 @@ describe ObjectSchemas::Properties::Array, "validating minimum and maximum size"
   end
 
   it "should return true if the min and max are the same value" do
-    property = ObjectSchemas::Properties::Array.new :min_size => 3, :max_size => 3 do |s|
+    property = DuckHunt::Properties::Array.new :min_size => 3, :max_size => 3 do |s|
       s.integer
     end
     property.valid?([1,2,3]).must_equal true
@@ -614,9 +614,9 @@ describe ObjectSchemas::Properties::Array, "validating minimum and maximum size"
   end
 end
 
-describe ObjectSchemas::Properties::Array, "validating `allow nil`" do
+describe DuckHunt::Properties::Array, "validating `allow nil`" do
   it "should return false if nil is not allowed and a nil object is given" do
-    property = ObjectSchemas::Properties::Array.new :allow_nil => false do |s|
+    property = DuckHunt::Properties::Array.new :allow_nil => false do |s|
       s.integer
     end
     property.valid?(nil).must_equal false
@@ -625,7 +625,7 @@ describe ObjectSchemas::Properties::Array, "validating `allow nil`" do
   end
 
   it "should return true if nil is allowed and a nil object is given" do
-    property = ObjectSchemas::Properties::Array.new :allow_nil => true do |s|
+    property = DuckHunt::Properties::Array.new :allow_nil => true do |s|
       s.integer
     end
     property.valid?(nil).must_equal true
@@ -633,9 +633,9 @@ describe ObjectSchemas::Properties::Array, "validating `allow nil`" do
   end
 end
 
-describe ObjectSchemas::Properties::Array, "Nesting in single-type array schemas" do
+describe DuckHunt::Properties::Array, "Nesting in single-type array schemas" do
   before do
-    @schema = ObjectSchemas::Schemas::ArraySchema.define do |s|
+    @schema = DuckHunt::Schemas::ArraySchema.define do |s|
       s.array do |s|
         s.integer
       end
@@ -643,7 +643,7 @@ describe ObjectSchemas::Properties::Array, "Nesting in single-type array schemas
   end
 
   it "should be able to be nested in an array schema" do
-    @schema.single_type_property.must_be_instance_of ObjectSchemas::Properties::Array
+    @schema.single_type_property.must_be_instance_of DuckHunt::Properties::Array
   end
 
   it "should return true if the nested arrays are valid" do
@@ -665,9 +665,9 @@ describe ObjectSchemas::Properties::Array, "Nesting in single-type array schemas
   end
 end
 
-describe ObjectSchemas::Properties::Array, "Nesting in tuple array schemas (no optional properties)" do
+describe DuckHunt::Properties::Array, "Nesting in tuple array schemas (no optional properties)" do
   before do
-    @schema = ObjectSchemas::Schemas::ArraySchema.define do |s|
+    @schema = DuckHunt::Schemas::ArraySchema.define do |s|
       s.items do |x|
         x.array do |z|
           z.integer
@@ -681,7 +681,7 @@ describe ObjectSchemas::Properties::Array, "Nesting in tuple array schemas (no o
   end
 
   it "should be able to be nested in an array schema" do
-    @schema.tuple_properties.each{|x| x.must_be_instance_of ObjectSchemas::Properties::Array}
+    @schema.tuple_properties.each{|x| x.must_be_instance_of DuckHunt::Properties::Array}
   end
 
   it "should return true if the nested arrays are valid" do
@@ -703,9 +703,9 @@ describe ObjectSchemas::Properties::Array, "Nesting in tuple array schemas (no o
   end
 end
 
-describe ObjectSchemas::Properties::Array, "Nesting in tuple array schemas (with optional properties)" do
+describe DuckHunt::Properties::Array, "Nesting in tuple array schemas (with optional properties)" do
   before do
-    @schema = ObjectSchemas::Schemas::ArraySchema.define do |s|
+    @schema = DuckHunt::Schemas::ArraySchema.define do |s|
       s.items do |x|
         x.array do |z|
           z.integer
@@ -721,8 +721,8 @@ describe ObjectSchemas::Properties::Array, "Nesting in tuple array schemas (with
   end
 
   it "should be able to be nested in an array schema" do
-    @schema.tuple_properties.each{|x| x.must_be_instance_of ObjectSchemas::Properties::Array}
-    @schema.optional_tuple_properties.each{|x| x.must_be_instance_of ObjectSchemas::Properties::Array}
+    @schema.tuple_properties.each{|x| x.must_be_instance_of DuckHunt::Properties::Array}
+    @schema.optional_tuple_properties.each{|x| x.must_be_instance_of DuckHunt::Properties::Array}
   end
 
   it "should return true if the nested arrays are valid" do
@@ -753,9 +753,9 @@ describe ObjectSchemas::Properties::Array, "Nesting in tuple array schemas (with
   end
 end
 
-describe ObjectSchemas::Properties::Array, "Nesting in tuple array schemas (all optional properties)" do
+describe DuckHunt::Properties::Array, "Nesting in tuple array schemas (all optional properties)" do
   before do
-    @schema = ObjectSchemas::Schemas::ArraySchema.define do |s|
+    @schema = DuckHunt::Schemas::ArraySchema.define do |s|
       s.optional_items do |x|
         x.array do |z|
           z.integer
@@ -769,7 +769,7 @@ describe ObjectSchemas::Properties::Array, "Nesting in tuple array schemas (all 
   end
 
   it "should be able to be nested in an array schema" do
-    @schema.optional_tuple_properties.each{|x| x.must_be_instance_of ObjectSchemas::Properties::Array}
+    @schema.optional_tuple_properties.each{|x| x.must_be_instance_of DuckHunt::Properties::Array}
   end
 
   it "should return true if the nested arrays are valid" do
@@ -796,9 +796,9 @@ describe ObjectSchemas::Properties::Array, "Nesting in tuple array schemas (all 
   end
 end
 
-describe ObjectSchemas::Properties::Array, "Nesting in hash" do
+describe DuckHunt::Properties::Array, "Nesting in hash" do
   before do
-    @schema = ObjectSchemas::Schemas::HashSchema.define do |s|
+    @schema = DuckHunt::Schemas::HashSchema.define do |s|
       s.array "profile" do |x|
         x.integer
       end
@@ -810,7 +810,7 @@ describe ObjectSchemas::Properties::Array, "Nesting in hash" do
   end
 
   it "should be able to be nested in a hash schema" do
-    @schema.properties["profile"].must_be_instance_of ObjectSchemas::Properties::Array
+    @schema.properties["profile"].must_be_instance_of DuckHunt::Properties::Array
   end
 
   it "should return true if the nested arrays are valid" do

@@ -1,8 +1,8 @@
 require File.expand_path('../../test_helper', __FILE__)
 
-describe ObjectSchemas::Properties::Integer, "validation" do
+describe DuckHunt::Properties::Integer, "validation" do
   before do
-    @property = ObjectSchemas::Properties::Integer.new
+    @property = DuckHunt::Properties::Integer.new
   end
   it "should be invalid if there's a type mismatch" do
     @property.valid?([1,2,3]).must_equal false

@@ -1,7 +1,7 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class SchemaDefinitionTestClass
-  include ObjectSchemas::Schemas::SchemaDefinition
+  include DuckHunt::Schemas::SchemaDefinition
 
   attr_accessor :other_value
 
@@ -19,7 +19,7 @@ class SchemaDefinitionTestClass
   end
 end
 
-describe ObjectSchemas::Schemas::SchemaDefinition, "defining an object through a block" do
+describe DuckHunt::Schemas::SchemaDefinition, "defining an object through a block" do
   it "should accept a block through the `define` method and use it create a new instance of the class and call instance methods" do
     schema = SchemaDefinitionTestClass.define do |s|
       s.setter!

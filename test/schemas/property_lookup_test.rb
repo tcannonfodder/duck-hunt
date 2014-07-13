@@ -1,18 +1,18 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class PropertyLookupTestClass
-  include ObjectSchemas::Schemas::PropertyLookup
+  include DuckHunt::Schemas::PropertyLookup
 end
 
 class PropertyLookupBlockPassTestClass
-  include ObjectSchemas::Schemas::PropertyLookup
+  include DuckHunt::Schemas::PropertyLookup
   attr_reader :block_passed
   def add_property(property_constant, *args, &block)
     @block_passed = true if block_given?
   end
 end
 
-describe ObjectSchemas::Schemas::PropertyLookup, "Adding a property to the schema" do
+describe DuckHunt::Schemas::PropertyLookup, "Adding a property to the schema" do
   it "should raise a `NotImplementedError` if the property definition exists (classes using this module must implement `add_property`" do
     schema = PropertyLookupTestClass.new
     lambda {

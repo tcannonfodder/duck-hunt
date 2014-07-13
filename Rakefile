@@ -11,5 +11,5 @@ task :default => :test
 
 
 task :console do
-  exec "irb -r object-schemas -I ./lib"
+  exec "irb -r duck-hunt -I ./lib"
 end
