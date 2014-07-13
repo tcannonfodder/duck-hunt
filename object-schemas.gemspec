@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.authors     = ["Thomas Cannon"]
   s.email       = ["hello@thomascannon.me"]
   s.homepage    = "https://github.com/LockeCole117/duck-hunt"
-  s.summary     = "Dependency-free Object schema definition for Ruby 1.8.7+"
+  s.summary     = "Dependency-free object validation library for Ruby 1.8.7+"
 
   s.files = Dir["lib/**/*"] + [
     "LICENSE",
