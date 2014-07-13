@@ -8,3 +8,8 @@ end
 
 desc "Run tests"
 task :default => :test
+
+
+task :console do
+  exec "irb -r object-schemas -I ./lib"
+end
