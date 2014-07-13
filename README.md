@@ -10,7 +10,7 @@ What if you could define how an object should look, and check if you're getting 
 So instead of:
 
 ~~~ruby
-def create
+def search
   unless params[:user].present? and params[:user][:name].present? and params[:user][:age].present? and params[:user][:age].is_a? Integer and params[:user][:age] > 0 # ... you get the point
     head :bad_request and return
   end
@@ -20,11 +20,11 @@ def create
 end
 ~~~
 
-You had:
+You have:
 
 ~~~ruby
 module UserSchemas
-  def create
+  def search
     DuckHunt::Schemas::HashSchema.define :strict_mode => true do |user|
       user.string  "name", :required => true, :allow_nil => false
       user.integer "age", :required => true,  :allow_nil => false, :greater_than => 0
@@ -37,7 +37,7 @@ module UserSchemas
 end
 
 class UserAPI
-  def create
+  def search
     head :bad_request and return unless UserSchemas.create.validate?(params[:user])
 
     # the rest of your API call
