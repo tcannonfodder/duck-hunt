@@ -426,7 +426,7 @@ schema.errors
 #=> {"0" => "not an accepted value"}
 ~~~
 
-#### Accepted Values
+#### Rejected Values
 
 This property cannot have any of the values in this list
 
