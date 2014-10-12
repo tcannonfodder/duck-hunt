@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    duck-hunt (0.0.3)
+    duck-hunt (0.0.4)
 
 GEM
   remote: http://rubygems.org/
@@ -11,7 +11,7 @@ GEM
       rbx-require-relative (> 0.0.4)
     metaclass (0.0.1)
     minitest (4.7.5)
-    mocha (0.13.3)
+    mocha (0.13.1)
       metaclass (~> 0.0.1)
     rake (10.0.4)
     rbx-require-relative (0.0.9)
