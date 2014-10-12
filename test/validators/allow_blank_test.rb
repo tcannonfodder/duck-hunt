@@ -55,6 +55,10 @@ describe DuckHunt::Validators::AllowBlank, "Validation (don't allow blank)" do
   it "returns true if the value provided is not blank" do
     @validator.valid?("abcde").must_equal true
   end
+
+  it "returns true if the value provided contains whitespace" do
+    @validator.valid?("abcde fghjik\tlmnop\t\tqrst").must_equal true
+  end
 end
 
 

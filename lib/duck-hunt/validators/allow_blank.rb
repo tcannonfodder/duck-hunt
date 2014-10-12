@@ -15,7 +15,7 @@ module DuckHunt
           return true
         else
           return false if value.empty?
-          return value !~ WHITESPACE_RE
+          return value !~ /^#{WHITESPACE_RE}$/u
         end
       end
 
