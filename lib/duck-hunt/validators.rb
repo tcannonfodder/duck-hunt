@@ -12,5 +12,7 @@ module DuckHunt
     autoload :NotDivisibleBy, File.dirname(__FILE__) + "/validators/not_divisible_by.rb"
     autoload :AcceptedValues, File.dirname(__FILE__) + "/validators/accepted_values.rb"
     autoload :RejectedValues, File.dirname(__FILE__) + "/validators/rejected_values.rb"
+    autoload :AllowEmpty, File.dirname(__FILE__) + "/validators/allow_empty.rb"
+    autoload :AllowBlank, File.dirname(__FILE__) + "/validators/allow_blank.rb"
   end
 end
