@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.version     = DuckHunt::VERSION
   s.authors     = ["Thomas Cannon"]
   s.email       = ["hello@thomascannon.me"]
-  s.homepage    = "https://github.com/LockeCole117/duck-hunt"
+  s.homepage    = "https://github.com/tcannonfodder/duck-hunt"
   s.description = "Dependency-free object validation library for Ruby 1.8.7+"
   s.summary     = "Dependency-free object validation library for Ruby 1.8.7+"
 
