@@ -8,6 +8,5 @@ gemspec
 
 
 group :development do
-  gem 'ruby-debug', :require => false
-  # gem 'debugger', :require => false
+  gem "byebug"
 end
