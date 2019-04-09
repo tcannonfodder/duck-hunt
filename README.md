@@ -1,4 +1,4 @@
-# Duck Hunt
+# Duck Hunt [![CircleCI](https://circleci.com/gh/tcannonfodder/duck-hunt.svg?style=svg)](https://circleci.com/gh/tcannonfodder/duck-hunt)
 ## A dependency-free object validator for Ruby
 
 Duck Typing is pretty fantastic, but sometimes you need to be sure your inputs match what you expect.
