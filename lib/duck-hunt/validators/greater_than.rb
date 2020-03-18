@@ -8,7 +8,11 @@ module DuckHunt
       end
 
       def valid?(value)
-        return value > @value
+        if value.respond_to?(:length)
+          return value.length > @value
+        else
+          return value > @value
+        end
       end
 
       def error_message
