@@ -39,7 +39,7 @@ describe DuckHunt::Properties::Integer, "validation" do
   end
 
   it "should not be able to parse a BigDecimal floating point" do
-    bigdecimal = BigDecimal.new("3.4")
+    bigdecimal = BigDecimal("3.4")
     bigdecimal.must_be_instance_of BigDecimal
     @property.valid?(bigdecimal).must_equal false
     @property.errors.size.must_equal 1
