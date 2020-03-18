@@ -12,6 +12,9 @@ jobs:
     working_directory: ~/duck-hunt
     steps:
       - checkout
+      - run:
+          name: Install Bundler 2
+          command: gem install bundler
       - run: bundle install --path vendor/bundle
       - run:
           name: Run tests
@@ -23,6 +26,9 @@ jobs:
     working_directory: ~/duck-hunt
     steps:
       - checkout
+      - run:
+          name: Install Bundler 2
+          command: gem install bundler
       - run: bundle install --path vendor/bundle
       - run:
           name: Run tests
@@ -34,6 +40,9 @@ jobs:
     working_directory: ~/duck-hunt
     steps:
       - checkout
+      - run:
+          name: Install Bundler 2
+          command: gem install bundler
       - run: bundle install --path vendor/bundle
       - run:
           name: Run tests
@@ -45,6 +54,9 @@ jobs:
     working_directory: ~/duck-hunt
     steps:
       - checkout
+      - run:
+          name: Install Bundler 2
+          command: gem install bundler
       - run: bundle install --path vendor/bundle
       - run:
           name: Run tests
@@ -56,6 +68,9 @@ jobs:
     working_directory: ~/duck-hunt
     steps:
       - checkout
+      - run:
+          name: Install Bundler 2
+          command: gem install bundler
       - run: bundle install --path vendor/bundle
       - run:
           name: Run tests
