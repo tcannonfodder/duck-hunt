@@ -29,6 +29,25 @@ describe DuckHunt::Validators::GreaterThan, "Validation" do
   end
 end
 
+describe DuckHunt::Validators::GreaterThan, "Validation (length check)" do
+  before do
+    @validator = DuckHunt::Validators::GreaterThan.new(3)
+  end
+
+  it "returns true if the value provided is greater than the value given" do
+    @validator.valid?("aaaa").must_equal true
+    @validator.valid?([1,2,3,4]).must_equal true
+    @validator.valid?({a: 1, b: 2, c: 3, d: 4}).must_equal true
+  end
+
+  it "returns false if the value provided is less than the value given" do
+    @validator.valid?("aaa").must_equal false
+    @validator.valid?([1,2,3]).must_equal false
+    @validator.valid?({a: 1, b: 2, c: 3}).must_equal false
+    @validator.valid?({}).must_equal false
+    @validator.valid?("").must_equal false
+  end
+end
 
 
 describe DuckHunt::Validators::GreaterThan, "error message" do

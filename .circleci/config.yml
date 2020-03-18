@@ -6,23 +6,15 @@
 version: 2.0
 
 jobs:
-  "ruby-2.3":
-    docker:
-      - image: circleci/ruby:2.3-node
-    working_directory: ~/duck-hunt
-    steps:
-      - checkout
-      - run: bundle install --path vendor/bundle
-      - run:
-          name: Run tests
-          command: rake
-
   "ruby-2.4":
     docker:
       - image: circleci/ruby:2.4-node
     working_directory: ~/duck-hunt
     steps:
       - checkout
+      - run:
+          name: Install Bundler 2
+          command: gem install bundler
       - run: bundle install --path vendor/bundle
       - run:
           name: Run tests
@@ -30,10 +22,13 @@ jobs:
 
   "ruby-2.5":
     docker:
-      - image: circleci/ruby:2.4-node
+      - image: circleci/ruby:2.5-node
     working_directory: ~/duck-hunt
     steps:
       - checkout
+      - run:
+          name: Install Bundler 2
+          command: gem install bundler
       - run: bundle install --path vendor/bundle
       - run:
           name: Run tests
@@ -41,10 +36,27 @@ jobs:
 
   "ruby-2.6":
     docker:
-      - image: circleci/ruby:2.4-node
+      - image: circleci/ruby:2.6-node
     working_directory: ~/duck-hunt
     steps:
       - checkout
+      - run:
+          name: Install Bundler 2
+          command: gem install bundler
+      - run: bundle install --path vendor/bundle
+      - run:
+          name: Run tests
+          command: rake
+
+  "ruby-2.7":
+    docker:
+      - image: circleci/ruby:2.7-node
+    working_directory: ~/duck-hunt
+    steps:
+      - checkout
+      - run:
+          name: Install Bundler 2
+          command: gem install bundler
       - run: bundle install --path vendor/bundle
       - run:
           name: Run tests
@@ -54,7 +66,7 @@ workflows:
   version: 2
   build:
     jobs:
-      - "ruby-2.3"
       - "ruby-2.4"
       - "ruby-2.5"
       - "ruby-2.6"
+      - "ruby-2.7"
