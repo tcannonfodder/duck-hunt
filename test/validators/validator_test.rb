@@ -1,23 +1,22 @@
-require File.expand_path('../../test_helper', __FILE__)
+require_relative '../test_helper'
+require 'byebug'
 
-describe DuckHunt::Validators::Validator, "initialization" do
-  it "should allow an instance to be created with any number of arguments" do
+class DuckHuntValidatorTests < DuckHuntTestCase
+  test "should allow an instance to be created with any number of arguments" do
     DuckHunt::Validators::Validator.new("hello", "world")
   end
-end
 
-describe DuckHunt::Validators::Validator, "methods to be defined in subclasses" do
-  it "raise NotImplementedError if valid? has not been defined" do
+  test "raises NotImplementedError if valid? has not been defined" do
     validator = DuckHunt::Validators::Validator.new
-    lambda{
+    assert_raises NotImplementedError do
       validator.valid?("test")
-    }.must_raise(NotImplementedError)
+    end
   end
 
-  it "raise NotImplementedError if valid? has not been defined" do
+  test "raise NotImplementedError if valid? has not been defined" do
     validator = DuckHunt::Validators::Validator.new
-    lambda{
+    assert_raises NotImplementedError do
       validator.error_message
-    }.must_raise(NotImplementedError)
+    end
   end
 end
