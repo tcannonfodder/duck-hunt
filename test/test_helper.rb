@@ -18,9 +18,8 @@ require 'bundler/setup'
 }
 
 require 'minitest/autorun'
-require 'minitest/spec'
 require 'minitest/pride'
-require 'mocha/setup'
+require 'mocha/minitest'
 require 'set'
 require 'bigdecimal'
 require 'duck-hunt'
@@ -29,6 +28,10 @@ require 'duck-hunt'
 require 'test_helper/test_classes'
 
 class DuckHuntTestCase < MiniTest::Test
+  def assert_not_nil(value, message=nil)
+    assert !value.nil?, message || "Expected value to not be nil"
+  end
+
   def self.test(name, &block)
     test_name = "test_#{name.gsub(/\s+/,'_')}".to_sym
     defined = instance_method(test_name) rescue false

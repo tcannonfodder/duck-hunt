@@ -1,256 +1,256 @@
 require File.expand_path('../../test_helper', __FILE__)
 
-describe DuckHunt::Properties::NestedHash, "initialize using a block" do
-  it "should be able to set the property to required" do
+class DuckHuntNestedHashPropertyInitializedWithBlockTest < DuckHuntTestCase
+  test "should be able to set the property to required" do
     property = DuckHunt::Properties::NestedHash.new :required => true do |s|
       s.test "name"
     end
-    property.required.must_equal true
-    property.required?.must_equal true
+    assert_equal true, property.required
+    assert_equal true, property.required?
   end
 
-  it "should be able to define the property" do
+  test "should be able to define the property" do
     property = DuckHunt::Properties::NestedHash.new :required => true do |s|
       s.test "name"
     end
 
-    property.properties["name"].must_be_instance_of DuckHunt::Properties::Test
+    assert_instance_of DuckHunt::Properties::Test, property.properties["name"]
   end
 
-  it "should be able to set options for the property" do
+  test "should be able to set options for the property" do
     property = DuckHunt::Properties::NestedHash.new :strict_mode => false do |s|
       s.test "name"
     end
 
-    property.strict_mode?.must_equal false
+    assert_equal false, property.strict_mode?
   end
 
-  it "should be able to set property-level and property-level options at the same time" do
+  test "should be able to set property-level and property-level options at the same time" do
     property = DuckHunt::Properties::NestedHash.new :required => true, :strict_mode => false do |s|
       s.test "name"
     end
-    property.required.must_equal true
-    property.required?.must_equal true
-    property.strict_mode?.must_equal false
+    assert_equal true, property.required
+    assert_equal true, property.required?
+    assert_equal false, property.strict_mode?
   end
 
-  it "should default the `strict mode` to `true`" do
+  test "should default the `strict mode` to `true`" do
     property = DuckHunt::Properties::NestedHash.new do |s|
     end
 
-    property.strict_mode.must_equal true
-    property.strict_mode?.must_equal true
+    assert_equal true, property.strict_mode
+    assert_equal true, property.strict_mode?
   end
 
 end
 
-describe DuckHunt::Properties::NestedHash, "initialize without a block" do
-  it "should raise an exception if a block is not provided" do
-    lambda{
+class DuckHuntNestedHashPropertyInitializedWithoutBlockTest < DuckHuntTestCase
+  test "should raise an exception if a block is not provided" do
+    assert_raises ArgumentError do
      DuckHunt::Properties::NestedHash.new :required => false
-    }.must_raise(ArgumentError)
+    end
   end
 end
 
-describe DuckHunt::Properties::NestedHash, "defining properties" do
-  it "should be able to add a new property to the property, which is required by default" do
+class DuckHuntNestedHashDefiningPropertiesTest < DuckHuntTestCase
+  test "should be able to add a new property to the property, which is required by default" do
     property = DuckHunt::Properties::NestedHash.new do |s|
       s.test "name"
     end
 
-    property.properties.size.must_equal 1
-    property.properties["name"].wont_be_nil
-    property.properties["name"].required.must_equal true
-    property.properties["name"].required?.must_equal true
+    assert_equal 1, property.properties.size
+    assert_not_nil property.properties["name"]
+    assert_equal true, property.properties["name"].required
+    assert_equal true, property.properties["name"].required?
   end
 
-  it "should allow a property to be explictly set as required" do
+  test "should allow a property to be explictly set as required" do
     property = DuckHunt::Properties::NestedHash.new do |s|
       s.test "name", :required => true
       s.test "item", "required" => true
     end
 
-    property.properties.size.must_equal 2
+    assert_equal 2, property.properties.size
 
-    property.properties["name"].wont_be_nil
-    property.properties["name"].required.must_equal true
-    property.properties["name"].required?.must_equal true
-    property.properties["item"].wont_be_nil
-    property.properties["item"].required.must_equal true
-    property.properties["item"].required?.must_equal true
+    assert_not_nil property.properties["name"]
+    assert_equal true, property.properties["name"].required
+    assert_equal true, property.properties["name"].required?
+    assert_not_nil property.properties["item"]
+    assert_equal true, property.properties["item"].required
+    assert_equal true, property.properties["item"].required?
   end
 
-  it "should allow a property to be set as not required" do
+  test "should allow a property to be set as not required" do
     property = DuckHunt::Properties::NestedHash.new do |s|
       s.test "name", :required => false
       s.test "item", "required" => false
     end
 
-    property.properties.size.must_equal 2
-    property.properties["name"].wont_be_nil
-    property.properties["name"].required.must_equal false
-    property.properties["name"].required?.must_equal false
-    property.properties["item"].wont_be_nil
-    property.properties["item"].required.must_equal false
-    property.properties["item"].required?.must_equal false
+    assert_equal 2, property.properties.size
+    assert_not_nil property.properties["name"]
+    assert_equal false, property.properties["name"].required
+    assert_equal false, property.properties["name"].required?
+    assert_not_nil property.properties["item"]
+    assert_equal false, property.properties["item"].required
+    assert_equal false, property.properties["item"].required?
   end
 
-  it "should require that properties are named" do
-    lambda{
+  test "should require that properties are named" do
+    assert_raises ArgumentError do
       DuckHunt::Properties::NestedHash.new do |s|
         s.test
       end
-    }.must_raise(ArgumentError)
+    end
 
-    lambda{
+    assert_raises ArgumentError do
       DuckHunt::Properties::NestedHash.new do |s|
         s.test ""
       end
-    }.must_raise(ArgumentError)
+    end
   end
 
 
-  it "should prevent a property from being defined multiple times in a property" do
-    lambda {
+  test "should prevent a property from being defined multiple times in a property" do
+    assert_raises DuckHunt::PropertyAlreadyDefined do
       property = DuckHunt::Properties::NestedHash.new do |s|
         s.test "name"
         s.test "name"
       end
-    }.must_raise(DuckHunt::PropertyAlreadyDefined)
+    end
   end
 
-  it "should ensure the list of properties cannot be modified" do
+  test "should ensure the list of properties cannot be modified" do
     property = DuckHunt::Properties::NestedHash.new do |s|
       s.test "name"
     end
 
-    property.properties.size.must_equal 1
+    assert_equal 1, property.properties.size
 
     property.properties["malicious"] = "muwah ha ha"
-    property.properties.size.must_equal 1
+    assert_equal 1, property.properties.size
 
-    lambda{
+    assert_raises NoMethodError do
       property.properties = {:malicious => "mwuah ha ha"}
-    }.must_raise(NoMethodError)
+    end
   end
 
-  it "should ensure the list of required properties cannot be modified" do
+  test "should ensure the list of required properties cannot be modified" do
     property = DuckHunt::Properties::NestedHash.new do |s|
       s.test "name"
     end
 
-    lambda{
+    assert_raises NoMethodError do
       property.required_properties = {:malicious => "mwuah ha ha"}
-    }.must_raise(NoMethodError)
+    end
   end
 end
 
-describe DuckHunt::Properties::NestedHash, "validation (strict mode)" do
-  it "should return false if the object provided is not a hash" do
+class DuckHuntNestedHashStrictModeValidationTest < DuckHuntTestCase
+  test "should return false if the object provided is not a hash" do
     property = DuckHunt::Properties::NestedHash.new do |s|
       s.test "name"
     end
 
-    property.valid?("hello").must_equal false
-    property.errors.size.must_equal 1
-    property.errors["base"].must_equal ["wrong type"]
+    assert_equal false, property.valid?("hello")
+    assert_equal 1, property.errors.size
+    assert_equal ["wrong type"], property.errors["base"]
   end
 
-  it "should return false if one of the properties is not valid" do
+  test "should return false if one of the properties is not valid" do
     property = DuckHunt::Properties::NestedHash.new do |s|
       s.always_wrong_type "name"
     end
 
-    property.valid?({:name => "hello"}).must_equal false
-    property.errors.size.must_equal 1
-    property.errors["name"].must_equal ["wrong type"]
+    assert_equal false, property.valid?({:name => "hello"})
+    assert_equal 1, property.errors.size
+    assert_equal ["wrong type"], property.errors["name"]
   end
 
-  it "should return false if the object is missing a required property" do
+  test "should return false if the object is missing a required property" do
     property = DuckHunt::Properties::NestedHash.new do |s|
       s.test "name", :required => true
       s.always_right_type "hello", :required => false
     end
 
-    property.valid?({:hello => "hello"}).must_equal false
-    property.errors.size.must_equal 1
-    property.errors["name"].must_equal ["required"]
+    assert_equal false, property.valid?({:hello => "hello"})
+    assert_equal 1, property.errors.size
+    assert_equal ["required"], property.errors["name"]
   end
 
-  it "should return false if the property has been set to strict mode and the hash provided has extra properties" do
+  test "should return false if the property has been set to strict mode and the hash provided has extra properties" do
     property = DuckHunt::Properties::NestedHash.new do |s|
       s.test "name", :required => true
     end
 
-    property.valid?({:name => "hello", :hello => "hello"}).must_equal false
-    property.errors.size.must_equal 1
-    property.errors["base"].must_equal ["has properties not defined in schema"]
+    assert_equal false, property.valid?({:name => "hello", :hello => "hello"})
+    assert_equal 1, property.errors.size
+    assert_equal ["has properties not defined in schema"], property.errors["base"]
   end
 end
 
-describe DuckHunt::Properties::NestedHash, "validation (relaxed mode)" do
-  it "should return false if the object provided is not a hash" do
+class DuckHuntNestedHashRelaxedModeValidationTest < DuckHuntTestCase
+  test "should return false if the object provided is not a hash" do
     property = DuckHunt::Properties::NestedHash.new :strict_mode => false do |s|
       s.test "name"
     end
 
-    property.valid?("hello").must_equal false
-    property.errors.size.must_equal 1
-    property.errors["base"].must_equal ["wrong type"]
+    assert_equal false, property.valid?("hello")
+    assert_equal 1, property.errors.size
+    assert_equal ["wrong type"], property.errors["base"]
   end
 
-  it "should return false if one of the properties is not valid" do
+  test "should return false if one of the properties is not valid" do
     property = DuckHunt::Properties::NestedHash.new :strict_mode => false do |s|
       s.always_wrong_type "name"
     end
 
-    property.valid?({:name => "hello"}).must_equal false
-    property.errors.size.must_equal 1
-    property.errors["name"].must_equal ["wrong type"]
+    assert_equal false, property.valid?({:name => "hello"})
+    assert_equal 1, property.errors.size
+    assert_equal ["wrong type"], property.errors["name"]
   end
 
-  it "should return false if the object is missing a required property" do
+  test "should return false if the object is missing a required property" do
     property = DuckHunt::Properties::NestedHash.new :strict_mode => false do |s|
       s.test "name", :required => true
       s.always_right_type "hello", :required => false
     end
 
-    property.valid?({:hello => "hello"}).must_equal false
-    property.errors.size.must_equal 1
-    property.errors["name"].must_equal ["required"]
+    assert_equal false, property.valid?({:hello => "hello"})
+    assert_equal 1, property.errors.size
+    assert_equal ["required"], property.errors["name"]
   end
 
-  it "should return true if the property has been set to relaxed mode and the hash provided has extra properties" do
+  test "should return true if the property has been set to relaxed mode and the hash provided has extra properties" do
     property = DuckHunt::Properties::NestedHash.new :strict_mode => false do |s|
       s.always_right_type "name", :required => true
     end
 
-    property.valid?({:name => "hello", :hello => "hello"}).must_equal true
-    property.errors.size.must_equal 0
+    assert_equal true, property.valid?({:name => "hello", :hello => "hello"})
+    assert_equal 0, property.errors.size
   end
 end
 
-describe DuckHunt::Properties::NestedHash, "validating `allow nil`" do
-  it "should return false if nil is not allowed and a nil object is given" do
+class DuckHuntNestedHashAllowNilValidationTest < DuckHuntTestCase
+  test "should return false if nil is not allowed and a nil object is given" do
     property = DuckHunt::Properties::NestedHash.new :allow_nil => false do |s|
       s.test "name"
     end
-    property.valid?(nil).must_equal false
-    property.errors.size.must_equal 1
-    property.errors["base"].must_equal ["nil object not allowed"]
+    assert_equal false, property.valid?(nil)
+    assert_equal 1, property.errors.size
+    assert_equal ["nil object not allowed"], property.errors["base"]
   end
 
-  it "should return true if nil is allowed and a nil object is given" do
+  test "should return true if nil is allowed and a nil object is given" do
     property = DuckHunt::Properties::NestedHash.new :allow_nil => true do |s|
       s.test "name"
     end
-    property.valid?(nil).must_equal true
-    property.errors.size.must_equal 0
+    assert_equal true, property.valid?(nil)
+    assert_equal 0, property.errors.size
   end
 end
 
-describe DuckHunt::Properties::NestedHash, "Nesting in single-type array schemas" do
-  before do
+class DuckHuntNestedHashNestingInSingleTypeArraySchemasTest < DuckHuntTestCase
+  def setup
     @schema = DuckHunt::Schemas::ArraySchema.define do |s|
       s.nested_hash do |s|
         s.always_right_type "name", :required => true
@@ -258,35 +258,35 @@ describe DuckHunt::Properties::NestedHash, "Nesting in single-type array schemas
     end
   end
 
-  it "should be able to be nested in an array schema" do
-    @schema.single_type_property.must_be_instance_of DuckHunt::Properties::NestedHash
+  test "should be able to be nested in an array schema" do
+    assert_instance_of DuckHunt::Properties::NestedHash, @schema.single_type_property
   end
 
-  it "should return true if the nested hashes are valid" do
-    @schema.validate?([{:name => "Hello"}, {:name => "World"}]).must_equal true
-    @schema.errors.size.must_equal 0
+  test "should return true if the nested hashes are valid" do
+    assert_equal true, @schema.validate?([{:name => "Hello"}, {:name => "World"}])
+    assert_equal 0, @schema.errors.size
   end
 
-  it "should return false if one of the nested hashes is invalid" do
-    @schema.validate?([{:name => "Hello"}, {:world => "World"}]).must_equal false
-    @schema.errors.size.must_equal 1
-    @schema.errors["1"].must_equal({"base" => ["has properties not defined in schema"]})
+  test "should return false if one of the nested hashes is invalid" do
+    assert_equal false, @schema.validate?([{:name => "Hello"}, {:world => "World"}])
+    assert_equal 1, @schema.errors.size
+    assert_equal ({"base" => ["has properties not defined in schema"]}), @schema.errors["1"]
 
-    @schema.validate?([{:name => "Hello"}, {}]).must_equal false
-    @schema.errors.size.must_equal 1
-    @schema.errors["1"].must_equal({"name" => ["required"]})
+    assert_equal false, @schema.validate?([{:name => "Hello"}, {}])
+    assert_equal 1, @schema.errors.size
+    assert_equal ({"name" => ["required"]}), @schema.errors["1"]
   end
 
-  it "should return false if both of the nested hashes are invalid" do
-    @schema.validate?([{}, {}]).must_equal false
-    @schema.errors.size.must_equal 2
-    @schema.errors["0"].must_equal({"name" => ["required"]})
-    @schema.errors["1"].must_equal({"name" => ["required"]})
+  test "should return false if both of the nested hashes are invalid" do
+    assert_equal false, @schema.validate?([{}, {}])
+    assert_equal 2, @schema.errors.size
+    assert_equal ({"name" => ["required"]}), @schema.errors["0"]
+    assert_equal ({"name" => ["required"]}), @schema.errors["1"]
   end
 end
 
-describe DuckHunt::Properties::NestedHash, "Nesting in tuple array schemas (no optional properties)" do
-  before do
+class DuckHuntNestedHashPropertyNestingInTupleArraySchemasWithNoOptionalPropertiesTest < DuckHuntTestCase
+  def setup
     @schema = DuckHunt::Schemas::ArraySchema.define do |s|
       s.items do |x|
         x.nested_hash do |z|
@@ -300,35 +300,35 @@ describe DuckHunt::Properties::NestedHash, "Nesting in tuple array schemas (no o
     end
   end
 
-  it "should be able to be nested in an array schema" do
-    @schema.tuple_properties.each{|x| x.must_be_instance_of DuckHunt::Properties::NestedHash}
+  test "should be able to be nested in an array schema" do
+    @schema.tuple_properties.each{|x| assert_instance_of DuckHunt::Properties::NestedHash, x}
   end
 
-  it "should return true if the nested hashes are valid" do
-    @schema.validate?([{:name => "Hello"}, {:age => "World"}]).must_equal true
-    @schema.errors.size.must_equal 0
+  test "should return true if the nested hashes are valid" do
+    assert_equal true, @schema.validate?([{:name => "Hello"}, {:age => "World"}])
+    assert_equal 0, @schema.errors.size
   end
 
-  it "should return false if one of the nested hashes is invalid" do
-    @schema.validate?([{:name => "Hello"}, {:world => "World"}]).must_equal false
-    @schema.errors.size.must_equal 1
-    @schema.errors["1"].must_equal({"base" => ["has properties not defined in schema"]})
+  test "should return false if one of the nested hashes is invalid" do
+    assert_equal false, @schema.validate?([{:name => "Hello"}, {:world => "World"}])
+    assert_equal 1, @schema.errors.size
+    assert_equal ({"base" => ["has properties not defined in schema"]}), @schema.errors["1"]
 
-    @schema.validate?([{:name => "Hello"}, {}]).must_equal false
-    @schema.errors.size.must_equal 1
-    @schema.errors["1"].must_equal({"age" => ["required"]})
+    assert_equal false, @schema.validate?([{:name => "Hello"}, {}])
+    assert_equal 1, @schema.errors.size
+    assert_equal ({"age" => ["required"]}), @schema.errors["1"]
   end
 
-  it "should return false if both of the nested hashes are invalid" do
-    @schema.validate?([{}, {}]).must_equal false
-    @schema.errors.size.must_equal 2
-    @schema.errors["0"].must_equal({"name" => ["required"]})
-    @schema.errors["1"].must_equal({"age" => ["required"]})
+  test "should return false if both of the nested hashes are invalid" do
+    assert_equal false, @schema.validate?([{}, {}])
+    assert_equal 2, @schema.errors.size
+    assert_equal ({"name" => ["required"]}), @schema.errors["0"]
+    assert_equal ({"age" => ["required"]}), @schema.errors["1"]
   end
 end
 
-describe DuckHunt::Properties::NestedHash, "Nesting in tuple array schemas (with optional properties)" do
-  before do
+class DuckHuntNestedHashPropertyNestingInTupleArraySchemasWithOptionalPropertiesTest < DuckHuntTestCase
+  def setup
     @schema = DuckHunt::Schemas::ArraySchema.define do |s|
       s.items do |x|
         x.nested_hash do |z|
@@ -344,41 +344,41 @@ describe DuckHunt::Properties::NestedHash, "Nesting in tuple array schemas (with
     end
   end
 
-  it "should be able to be nested in an array schema" do
-    @schema.tuple_properties.each{|x| x.must_be_instance_of DuckHunt::Properties::NestedHash}
-    @schema.optional_tuple_properties.each{|x| x.must_be_instance_of DuckHunt::Properties::NestedHash}
+  test "should be able to be nested in an array schema" do
+    @schema.tuple_properties.each{|x| assert_instance_of DuckHunt::Properties::NestedHash, x}
+    @schema.optional_tuple_properties.each{|x| assert_instance_of DuckHunt::Properties::NestedHash, x}
   end
 
-  it "should return true if the nested hashes are valid" do
-    @schema.validate?([{:name => "Hello"}, {:age => "World"}]).must_equal true
-    @schema.errors.size.must_equal 0
+  test "should return true if the nested hashes are valid" do
+    assert_equal true, @schema.validate?([{:name => "Hello"}, {:age => "World"}])
+    assert_equal 0, @schema.errors.size
   end
 
-  it "should return true if only the required hashes are provided" do
-    @schema.validate?([{:name => "Hello"}]).must_equal true
-    @schema.errors.size.must_equal 0
+  test "should return true if only the required hashes are provided" do
+    assert_equal true, @schema.validate?([{:name => "Hello"}])
+    assert_equal 0, @schema.errors.size
   end
 
-  it "should return false if one of the nested hashes is invalid" do
-    @schema.validate?([{:name => "Hello"}, {:world => "World"}]).must_equal false
-    @schema.errors.size.must_equal 1
-    @schema.errors["1"].must_equal({"base" => ["has properties not defined in schema"]})
+  test "should return false if one of the nested hashes is invalid" do
+    assert_equal false, @schema.validate?([{:name => "Hello"}, {:world => "World"}])
+    assert_equal 1, @schema.errors.size
+    assert_equal ({"base" => ["has properties not defined in schema"]}), @schema.errors["1"]
 
-    @schema.validate?([{:name => "Hello"}, {}]).must_equal false
-    @schema.errors.size.must_equal 1
-    @schema.errors["1"].must_equal({"age" => ["required"]})
+    assert_equal false, @schema.validate?([{:name => "Hello"}, {}])
+    assert_equal 1, @schema.errors.size
+    assert_equal ({"age" => ["required"]}), @schema.errors["1"]
   end
 
-  it "should return false if both of the nested hashes are invalid" do
-    @schema.validate?([{}, {}]).must_equal false
-    @schema.errors.size.must_equal 2
-    @schema.errors["0"].must_equal({"name" => ["required"]})
-    @schema.errors["1"].must_equal({"age" => ["required"]})
+  test "should return false if both of the nested hashes are invalid" do
+    assert_equal false, @schema.validate?([{}, {}])
+    assert_equal 2, @schema.errors.size
+    assert_equal ({"name" => ["required"]}), @schema.errors["0"]
+    assert_equal ({"age" => ["required"]}), @schema.errors["1"]
   end
 end
 
-describe DuckHunt::Properties::NestedHash, "Nesting in tuple array schemas (all optional properties)" do
-  before do
+class DuckHuntNestedHashPropertiesNestingInTupleArraySchemasWithAllOptionalPropertiesTest < DuckHuntTestCase
+  def setup
     @schema = DuckHunt::Schemas::ArraySchema.define do |s|
       s.optional_items do |x|
         x.nested_hash do |z|
@@ -392,40 +392,40 @@ describe DuckHunt::Properties::NestedHash, "Nesting in tuple array schemas (all 
     end
   end
 
-  it "should be able to be nested in an array schema" do
-    @schema.optional_tuple_properties.each{|x| x.must_be_instance_of DuckHunt::Properties::NestedHash}
+  test "should be able to be nested in an array schema" do
+    @schema.optional_tuple_properties.each{|x| assert_instance_of DuckHunt::Properties::NestedHash, x}
   end
 
-  it "should return true if the nested hashes are valid" do
-    @schema.validate?([{:name => "Hello"}, {:age => "World"}]).must_equal true
-    @schema.errors.size.must_equal 0
+  test "should return true if the nested hashes are valid" do
+    assert_equal true, @schema.validate?([{:name => "Hello"}, {:age => "World"}])
+    assert_equal 0, @schema.errors.size
   end
 
-  it "should return true if no hashes are provided" do
-    @schema.validate?([]).must_equal true
-    @schema.errors.size.must_equal 0
+  test "should return true if no hashes are provided" do
+    assert_equal true, @schema.validate?([])
+    assert_equal 0, @schema.errors.size
   end
 
-  it "should return false if one of the nested hashes is invalid" do
-    @schema.validate?([{:name => "Hello"}, {:world => "World"}]).must_equal false
-    @schema.errors.size.must_equal 1
-    @schema.errors["1"].must_equal({"base" => ["has properties not defined in schema"]})
+  test "should return false if one of the nested hashes is invalid" do
+    assert_equal false, @schema.validate?([{:name => "Hello"}, {:world => "World"}])
+    assert_equal 1, @schema.errors.size
+    assert_equal ({"base" => ["has properties not defined in schema"]}), @schema.errors["1"]
 
-    @schema.validate?([{}, {:age => "World"}]).must_equal false
-    @schema.errors.size.must_equal 1
-    @schema.errors["0"].must_equal({"name" => ["required"]})
+    assert_equal false, @schema.validate?([{}, {:age => "World"}])
+    assert_equal 1, @schema.errors.size
+    assert_equal ({"name" => ["required"]}), @schema.errors["0"]
   end
 
-  it "should return false if both of the nested hashes are invalid" do
-    @schema.validate?([{}, {}]).must_equal false
-    @schema.errors.size.must_equal 2
-    @schema.errors["0"].must_equal({"name" => ["required"]})
-    @schema.errors["1"].must_equal({"age" => ["required"]})
+  test "should return false if both of the nested hashes are invalid" do
+    assert_equal false, @schema.validate?([{}, {}])
+    assert_equal 2, @schema.errors.size
+    assert_equal ({"name" => ["required"]}), @schema.errors["0"]
+    assert_equal ({"age" => ["required"]}), @schema.errors["1"]
   end
 end
 
-describe DuckHunt::Properties::NestedHash, "Nesting in hashes" do
-  before do
+class DuckHuntNestedHashPropertyInNestedHashesTest < DuckHuntTestCase
+  def setup
     @schema = DuckHunt::Schemas::HashSchema.define do |s|
       s.nested_hash "profile" do |x|
         x.always_right_type "name", :required => true
@@ -437,29 +437,29 @@ describe DuckHunt::Properties::NestedHash, "Nesting in hashes" do
     end
   end
 
-  it "should be able to be nested in an array schema" do
-    @schema.properties["profile"].must_be_instance_of DuckHunt::Properties::NestedHash
+  test "should be able to be nested in an array schema" do
+    assert_instance_of DuckHunt::Properties::NestedHash, @schema.properties["profile"]
   end
 
-  it "should return true if the nested hashes are valid" do
-    @schema.validate?({:profile => {:name => "John"}, :info => {:age => 35}}).must_equal true
-    @schema.errors.size.must_equal 0
+  test "should return true if the nested hashes are valid" do
+    assert_equal true, @schema.validate?({:profile => {:name => "John"}, :info => {:age => 35}})
+    assert_equal 0, @schema.errors.size
   end
 
-  it "should return false if one of the nested hashes is invalid" do
-    @schema.validate?({:profile => {:name => "John"}, :info => {:birthdate => 35}}).must_equal false
-    @schema.errors.size.must_equal 1
-    @schema.errors["info"].must_equal({"base" => ["has properties not defined in schema"]})
+  test "should return false if one of the nested hashes is invalid" do
+    assert_equal false, @schema.validate?({:profile => {:name => "John"}, :info => {:birthdate => 35}})
+    assert_equal 1, @schema.errors.size
+    assert_equal ({"base" => ["has properties not defined in schema"]}), @schema.errors["info"]
 
-    @schema.validate?({:profile => {:name => "John"}, :info => {}}).must_equal false
-    @schema.errors.size.must_equal 1
-    @schema.errors["info"].must_equal({"age" => ["required"]})
+    assert_equal false, @schema.validate?({:profile => {:name => "John"}, :info => {}})
+    assert_equal 1, @schema.errors.size
+    assert_equal ({"age" => ["required"]}), @schema.errors["info"]
   end
 
-  it "should return false if both of the nested hashes are invalid" do
-    @schema.validate?({:profile => {}, :info => {}}).must_equal false
-    @schema.errors.size.must_equal 2
-    @schema.errors["profile"].must_equal({"name" => ["required"]})
-    @schema.errors["info"].must_equal({"age" => ["required"]})
+  test "should return false if both of the nested hashes are invalid" do
+    assert_equal false, @schema.validate?({:profile => {}, :info => {}})
+    assert_equal 2, @schema.errors.size
+    assert_equal ({"name" => ["required"]}), @schema.errors["profile"]
+    assert_equal ({"age" => ["required"]}), @schema.errors["info"]
   end
 end

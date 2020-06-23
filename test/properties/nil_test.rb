@@ -1,30 +1,30 @@
 require File.expand_path('../../test_helper', __FILE__)
 
-describe DuckHunt::Properties::Nil, "validation" do
-  before do
+class DuckHuntNilPropertyTest < DuckHuntTestCase
+  def setup
     @property = DuckHunt::Properties::Nil.new
   end
 
-  it "should be able to validate a nil value" do
-    @property.valid?(nil).must_equal true
-    @property.errors.size.must_equal 0
+  test "should be able to validate a nil value" do
+    assert_equal true, @property.valid?(nil)
+    assert_equal 0, @property.errors.size
   end
 
-  it "should be invalid if the value is not nil" do
-    @property.valid?([1,2,3]).must_equal false
-    @property.errors.size.must_equal 1
-    @property.errors.first.must_equal "wrong type"
+  test "should be invalid if the value is not nil" do
+    assert_equal false, @property.valid?([1,2,3])
+    assert_equal 1, @property.errors.size
+    assert_equal "wrong type", @property.errors.first
   end
 
-  it "should not be able to validate a string representing nil" do
-    @property.valid?("nil").must_equal false
-    @property.errors.size.must_equal 1
-    @property.errors.first.must_equal "wrong type"
+  test "should not be able to validate a string representing nil" do
+    assert_equal false, @property.valid?("nil")
+    assert_equal 1, @property.errors.size
+    assert_equal "wrong type", @property.errors.first
   end
 
-  it "should not be able to validate the integer 'representation' of a nil" do
-    @property.valid?(0).must_equal false
-    @property.errors.size.must_equal 1
-    @property.errors.first.must_equal "wrong type"
+  test "should not be able to validate the integer 'representation' of a nil" do
+    assert_equal false, @property.valid?(0)
+    assert_equal 1, @property.errors.size
+    assert_equal "wrong type", @property.errors.first
   end
 end

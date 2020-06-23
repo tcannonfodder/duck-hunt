@@ -1,24 +1,24 @@
 require File.expand_path('../../test_helper', __FILE__)
 
-describe DuckHunt::Properties::String, "validation" do
-  before do
+class DuckHuntStringPropertyTest < DuckHuntTestCase
+  def setup
     @property = DuckHunt::Properties::String.new
   end
 
-  it "should be able to validate a string" do
-    @property.valid?("herpderp").must_equal true
-    @property.errors.size.must_equal 0
+  test "should be able to validate a string" do
+    assert_equal true, @property.valid?("herpderp")
+    assert_equal 0, @property.errors.size
   end
 
-  it "should be invalid if there's a type mismatch" do
-    @property.valid?([1,2,3]).must_equal false
-    @property.errors.size.must_equal 1
-    @property.errors.first.must_equal "wrong type"
+  test "should be invalid if there's a type mismatch" do
+    assert_equal false, @property.valid?([1,2,3])
+    assert_equal 1, @property.errors.size
+    assert_equal "wrong type", @property.errors.first
   end
 
-  it "should not be able to validate a symbol" do
-    @property.valid?(:test).must_equal false
-    @property.errors.size.must_equal 1
-    @property.errors.first.must_equal "wrong type"
+  test "should not be able to validate a symbol" do
+    assert_equal false, @property.valid?(:test)
+    assert_equal 1, @property.errors.size
+    assert_equal "wrong type", @property.errors.first
   end
 end

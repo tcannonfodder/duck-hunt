@@ -1,71 +1,73 @@
 require File.expand_path('../../test_helper', __FILE__)
 
-describe DuckHunt::Validators::AllowBlank, "initialization" do
-  it "should create an instance with the provided value" do
+class DuckHuntAllowBlanksValidatorTest < DuckHuntTestCase
+  test "should create an instance with the provided value" do
     validator = DuckHunt::Validators::AllowBlank.new(true)
-    validator.value.must_equal true
+    assert_equal true, validator.value
   end
 
-  it "should raise an exception if a value is not provided" do
-    lambda{
+  test "should raise an exception if a value is not provided" do
+    assert_raises ArgumentError do
       DuckHunt::Validators::AllowBlank.new
-    }.must_raise ArgumentError
+    end
   end
 end
 
-describe DuckHunt::Validators::AllowBlank, "Validation (allow blank)" do
-  before do
+class DuckHuntAllowBlankValidatorAllowBlankTest < DuckHuntTestCase
+  def setup
     @validator = DuckHunt::Validators::AllowBlank.new(true)
   end
 
-  it "returns true if the value provided is empty" do
-    @validator.valid?("").must_equal true
+  test "returns true if the value provided is empty" do
+    assert_equal true, @validator.valid?("")
   end
 
-  it "returns true if the value provided is only whitespace" do
-    @validator.valid?("   \t\t\n").must_equal true
+  test "returns true if the value provided is only whitespace" do
+    assert_equal true, @validator.valid?("   \t\t\n")
   end
 
-  it "returns true if the value provided is only weird whitespace" do
-    @validator.valid?("\t\n\v\f\r   ᠎               　").must_equal true
+  test "returns true if the value provided is only weird whitespace" do
+    assert_equal true, @validator.valid?("\t\n\v\f\r   ᠎               　")
   end
 
-  it "returns true if the value provided is not blank" do
-    @validator.valid?("abcde").must_equal true
+  test "returns true if the value provided is not blank" do
+    assert_equal true, @validator.valid?("abcde")
   end
 end
 
-describe DuckHunt::Validators::AllowBlank, "Validation (don't allow blank)" do
-  before do
+class DuckHuntAllowBlankValidatorDoNotAllowBlankTest < DuckHuntTestCase
+  def setup
     @validator = DuckHunt::Validators::AllowBlank.new(false)
   end
 
-  it "returns false if the value provided is empty" do
-    @validator.valid?("").must_equal false
+  test "returns false if the value provided is empty" do
+    assert_equal false, @validator.valid?("")
   end
 
-  it "returns false if the value provided is only whitespace" do
-    @validator.valid?("   \t\t\n").must_equal false
+  test "returns false if the value provided is only whitespace" do
+    assert_equal false, @validator.valid?("   \t\t\n")
   end
 
-  it "returns false if the value provided is only weird whitespace" do
-    @validator.valid?("\t\n\v\f\r   ᠎               　").must_equal false
+  test "returns false if the value provided is only weird whitespace" do
+    assert_equal false, @validator.valid?("\t\n\v\f\r   ᠎               　")
   end
 
-  it "returns true if the value provided is not blank" do
-    @validator.valid?("abcde").must_equal true
+  test "returns true if the value provided is not blank" do
+    assert_equal true, @validator.valid?("abcde")
   end
 
-  it "returns true if the value provided contains whitespace" do
-    @validator.valid?("abcde fghjik\tlmnop\t\tqrst").must_equal true
+  test "returns true if the value provided contains whitespace" do
+    assert_equal true, @validator.valid?("abcde fghjik\tlmnop\t\tqrst")
+  end
+
+  test "should have the correct error message based on the value provided" do
+    validator = DuckHunt::Validators::AllowBlank.new(false)
+    assert_equal "blank values not allowed", validator.error_message
   end
 end
 
 
 
 describe DuckHunt::Validators::AllowBlank, "error message" do
-  it "should have the correct error message based on the value provided" do
-    validator = DuckHunt::Validators::AllowBlank.new(false)
-    validator.error_message.must_equal "blank values not allowed"
-  end
+  
 end

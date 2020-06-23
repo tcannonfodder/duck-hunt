@@ -1,46 +1,42 @@
 require File.expand_path('../../test_helper', __FILE__)
 
-describe DuckHunt::Validators::AcceptedValues, "initialization" do
-  it "should create an instance with the provided value" do
+class DuckHuntAcceptedValuesValidatorInitializationTests < DuckHuntTestCase
+  test "should create an instance with the provided value" do
     validator = DuckHunt::Validators::AcceptedValues.new([1,2,3])
-    validator.values.must_equal [1,2,3]
+    assert_equal [1,2,3], validator.values
   end
 
-  it "should raise an exception if a value is not provided" do
-    lambda{
+  test "should raise an exception if a value is not provided" do
+    assert_raises ArgumentError do
       DuckHunt::Validators::AcceptedValues.new
-    }.must_raise ArgumentError
+    end
   end
 
-  it "should raise an exception if the value provided is not a hash" do
-    lambda{
+  test "should raise an exception if the value provided is not a hash" do
+    assert_raises ArgumentError do
       DuckHunt::Validators::AcceptedValues.new(3)
-    }.must_raise ArgumentError
+    end
   end
 end
 
-describe DuckHunt::Validators::AcceptedValues, "Validation" do
-  before do
+class DuckHuntAcceptedValuesValidationTests < DuckHuntTestCase
+  def setup
     @validator = DuckHunt::Validators::AcceptedValues.new([1,2,3])
   end
 
-  it "returns true if the value provided is one of the accepted values" do
-    @validator.valid?(1).must_equal true
-    @validator.valid?(2).must_equal true
-    @validator.valid?(3).must_equal true
+  test "returns true if the value provided is one of the accepted values" do
+    assert_equal true, @validator.valid?(1)
+    assert_equal true, @validator.valid?(2)
+    assert_equal true, @validator.valid?(3)
   end
 
-  it "returns false if the value provided is not one of the accepted values" do
-    @validator.valid?(4).must_equal false
-    @validator.valid?(0).must_equal false
+  test "returns false if the value provided is not one of the accepted values" do
+    assert_equal false, @validator.valid?(4)
+    assert_equal false, @validator.valid?(0)
   end
-end
 
-
-
-describe DuckHunt::Validators::AcceptedValues, "error message" do
-  it "should have the correct error message based on the value provided" do
+  test "should have the correct error message based on the value provided" do
     validator = DuckHunt::Validators::AcceptedValues.new([1,2,3])
-    validator.error_message.must_equal "not an accepted value"
+    assert_equal "not an accepted value", validator.error_message
   end
 end
