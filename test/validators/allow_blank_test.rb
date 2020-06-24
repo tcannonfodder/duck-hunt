@@ -65,9 +65,3 @@ class DuckHuntAllowBlankValidatorDoNotAllowBlankTest < DuckHuntTestCase
     assert_equal "blank values not allowed", validator.error_message
   end
 end
-
-
-
-describe DuckHunt::Validators::AllowBlank, "error message" do
-  
-end
