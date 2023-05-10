@@ -38,7 +38,7 @@ end
 
 class UserAPI
   def search
-    head :bad_request and return unless UserSchemas.create.validate?(params[:user])
+    head :bad_request and return unless UserSchemas.search.validate?(params[:user])
 
     # the rest of your API call
   end
